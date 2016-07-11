@@ -17,11 +17,11 @@ import dagger.Provides;
 @Module
 public class MvpModule {
 
-    @Provides @Singleton ListMvp.ListPresenter provideListPresenter(BaseMvp.Model model) {
+    @Provides ListMvp.ListPresenter provideListPresenter(BaseMvp.Model model) {
         return new ListPresenterImpl(model);
     }
 
-    @Provides @Singleton DetailMvp.DetailPresenter provideDetailPresenter(BaseMvp.Model model) {
+    @Provides DetailMvp.DetailPresenter provideDetailPresenter(BaseMvp.Model model) {
         return new DetailPresenterImpl(model);
     }
 

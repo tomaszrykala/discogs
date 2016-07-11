@@ -35,7 +35,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
 
     @Inject ListMvp.ListPresenter mPresenter;
 
-    private List<ListItem.ChartListItem> mItems;
+    private List<ListItem.ReleaseListItem> mItems;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +75,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
         requestRefresh(error, "Retry");
     }
 
-    @Override public void onListItemClick(View itemView, final ListItem.ChartListItem item) {
+    @Override public void onListItemClick(View itemView, final ListItem.ReleaseListItem item) {
         final Pair<View, String> pairToolbar =
                 new Pair<>(itemView.findViewById(R.id.title), getString(R.string.transition_toolbar));
         final View view = itemView.findViewById(R.id.art);
@@ -91,7 +91,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     }
 
     @Override public void onRefresh() {
-        requestRefresh("Refresh Chart?", "Yes");
+        requestRefresh("Refresh?", "Yes");
     }
 
     @Override
@@ -109,10 +109,9 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupListAdapter(List<Release> chart) {
-        mItems = ListItem.toChartListItems(chart);
+    private void setupListAdapter(List<Release> releases) {
+        mItems = ListItem.toReleaseListItems(releases);
         mRecyclerView.setAdapter(new ListAdapter(mItems, this));
-        mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     private void requestRefresh(String message, String action) {
@@ -134,7 +133,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     }
 
     @VisibleForTesting
-    public List<ListItem.ChartListItem> getItems() {
+    public List<ListItem.ReleaseListItem> getItems() {
         return mItems;
     }
 }

@@ -13,7 +13,7 @@ public interface DetailMvp extends BaseMvp {
 
     interface DetailPresenter extends Presenter<DetailView> {
 
-        void loadChart(String id);
+        void load(String id);
 
         void onFabClick();
     }

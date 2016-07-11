@@ -10,26 +10,26 @@ public class DetailPresenterImpl implements DetailMvp.DetailPresenter {
 
     private final BaseMvp.Model mAppModel;
 
-    private Release mChart;
+    private Release mRelease;
 
     public DetailPresenterImpl(BaseMvp.Model appModel) {
         mAppModel = appModel;
     }
 
     @Override
-    public void loadChart(String id) {
-        mChart = mAppModel.getChart(id);
-        if (mChart != null) {
-            mView.onLoadSuccess(mChart);
+    public void load(String id) {
+        mRelease = mAppModel.get(id);
+        if (mRelease != null) {
+            mView.onLoadSuccess(mRelease);
         } else {
-            mView.onLoadFail("Failed to load chart: " + id);
+            mView.onLoadFail("Failed to load: " + id);
         }
     }
 
     @Override
     public void onFabClick() {
-        if (mChart != null && mChart.getArtist() != null) {
-            final String share = mChart.getArtist();
+        if (mRelease != null && mRelease.getArtist() != null) {
+            final String share = mRelease.getArtist();
             mView.share("\"Tweet\" sent:\n" + share);
 //            mView.share("\"Tweet\" sent:\n" + share.text + " - " + share.href);
         } else {

@@ -21,7 +21,7 @@ public class DetailPresenterTest {
     @Mock
     BaseMvp.Model mMockAppModel;
 
-    DetailMvp.DetailPresenter mPresenter;
+    private DetailMvp.DetailPresenter mPresenter;
 
     @Before
     public void setUp() {
@@ -38,26 +38,26 @@ public class DetailPresenterTest {
     }
 
     @Test
-    public void getChart_failedGetChartShowsErrorInView() {
+    public void getRelease_failedGetReleaseShowsErrorInView() {
         final String id = "000";
-        mPresenter.loadChart(id);
-        Mockito.verify(mMockAppModel).getChart(id);
+        mPresenter.load(id);
+        Mockito.verify(mMockAppModel).get(id);
         Mockito.verifyNoMoreInteractions(mMockAppModel);
-        Mockito.verify(mMockView).onLoadFail("Failed to load chart: 000");
+        Mockito.verify(mMockView).onLoadFail("Failed to load: 000");
         Mockito.verifyNoMoreInteractions(mMockView);
     }
 
     @Test
-    public void getChart_successfulGetChartDeliversResultToView() {
+    public void getRelease_successfulGetReleaseDeliversResultToView() {
         final String id = "000";
-        final Release chart = new Release();
-        chart.setId(Integer.parseInt(id));
-        Mockito.when(mMockAppModel.getChart(id)).thenReturn(chart);
+        final Release Release = new Release();
+        Release.setId(Integer.parseInt(id));
+        Mockito.when(mMockAppModel.get(id)).thenReturn(Release);
 
-        mPresenter.loadChart(id);
-        Mockito.verify(mMockAppModel).getChart(id);
+        mPresenter.load(id);
+        Mockito.verify(mMockAppModel).get(id);
         Mockito.verifyNoMoreInteractions(mMockAppModel);
-        Mockito.verify(mMockView).onLoadSuccess(chart);
+        Mockito.verify(mMockView).onLoadSuccess(Release);
         Mockito.verifyNoMoreInteractions(mMockView);
     }
 
@@ -75,23 +75,23 @@ public class DetailPresenterTest {
     }
 
     @Test
-    public void onFabClick_nullChartShowsError() {
+    public void onFabClick_nullReleaseShowsError() {
         mPresenter.onFabClick();
         Mockito.verify(mMockView).share("Failed to share track.");
         Mockito.verifyNoMoreInteractions(mMockView);
     }
 
     @Test
-    public void onFabClick_chartWithNoShareDataShowsError() {
+    public void onFabClick_ReleaseWithNoShareDataShowsError() {
         final String id = "000";
-        final Release chart = new Release();
-        chart.setId(Integer.parseInt(id));
-        Mockito.when(mMockAppModel.getChart(id)).thenReturn(chart);
+        final Release Release = new Release();
+        Release.setId(Integer.parseInt(id));
+        Mockito.when(mMockAppModel.get(id)).thenReturn(Release);
 
-        mPresenter.loadChart(id);
-        Mockito.verify(mMockAppModel).getChart(id);
+        mPresenter.load(id);
+        Mockito.verify(mMockAppModel).get(id);
         Mockito.verifyNoMoreInteractions(mMockAppModel);
-        Mockito.verify(mMockView).onLoadSuccess(chart);
+        Mockito.verify(mMockView).onLoadSuccess(Release);
         Mockito.verifyNoMoreInteractions(mMockView);
 
         mPresenter.onFabClick();
@@ -100,21 +100,21 @@ public class DetailPresenterTest {
     }
 
     @Test
-    public void onFabClick_validChartShares() {
+    public void onFabClick_validReleaseShares() {
         final String id = "000";
-        final Release chart = new Release();
-        chart.setId(Integer.parseInt(id));
+        final Release Release = new Release();
+        Release.setId(Integer.parseInt(id));
 //        final Share share = new Share();
 //        share.text = "Material Girl";
 //        share.href = "www.web.com";
-//        chart.setShare(share);
-//        Mockito.when(mMockAppModel.getChart(id)).thenReturn(chart);
+//        Release.setShare(share);
+//        Mockito.when(mMockAppModel.getRelease(id)).thenReturn(Release);
 //        final String expected = "\"Tweet\" sent:\n" + share.text + " - " + share.href;
 
-        mPresenter.loadChart(id);
-        Mockito.verify(mMockAppModel).getChart(id);
+        mPresenter.load(id);
+        Mockito.verify(mMockAppModel).get(id);
         Mockito.verifyNoMoreInteractions(mMockAppModel);
-        Mockito.verify(mMockView).onLoadSuccess(chart);
+        Mockito.verify(mMockView).onLoadSuccess(Release);
         Mockito.verifyNoMoreInteractions(mMockView);
 
         mPresenter.onFabClick();

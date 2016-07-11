@@ -61,17 +61,17 @@ public class ListPresenterImplTest {
         Mockito.verify(mMockView, Mockito.times(times)).showLoading(true);
         Mockito.verifyNoMoreInteractions(mMockView);
 
-        Mockito.verify(mMockAppModel, Mockito.times(times)).cancelFetchCharts();
-        Mockito.verify(mMockAppModel, Mockito.times(times)).fetchCharts(mCaptor.capture());
+        Mockito.verify(mMockAppModel, Mockito.times(times)).cancelFetch();
+        Mockito.verify(mMockAppModel, Mockito.times(times)).fetch(mCaptor.capture());
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
-        final ArrayList<Release> charts = new ArrayList<>();
-        mCaptor.getValue().onSuccess(charts);
-        Mockito.verify(mMockView).onLoadSuccess(charts);
+        final ArrayList<Release> releases = new ArrayList<>();
+        mCaptor.getValue().onSuccess(releases);
+        Mockito.verify(mMockView).onLoadSuccess(releases);
         Mockito.verify(mMockView).showLoading(false);
         Mockito.verifyNoMoreInteractions(mMockView);
 
-        Mockito.verify(mMockAppModel).persistCharts(charts);
+        Mockito.verify(mMockAppModel).persist(releases);
     }
 
     @Test
@@ -79,10 +79,10 @@ public class ListPresenterImplTest {
         Mockito.verify(mMockView).showLoading(true);
         Mockito.verifyNoMoreInteractions(mMockView);
 
-        Mockito.verify(mMockAppModel).fetchCharts(mCaptor.capture());
+        Mockito.verify(mMockAppModel).fetch(mCaptor.capture());
         final String error = "Load failed";
         mCaptor.getValue().onFail(error);
-        Mockito.verify(mMockAppModel).cancelFetchCharts();
+        Mockito.verify(mMockAppModel).cancelFetch();
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
         Mockito.verify(mMockView).onLoadFail(error);
@@ -98,50 +98,50 @@ public class ListPresenterImplTest {
     public void releaseView_doesNoInteractions() {
         performSuccessfulLoadTest(1);
         mPresenter.releaseView();
-        Mockito.verify(mMockAppModel, Mockito.times(2)).cancelFetchCharts();
+        Mockito.verify(mMockAppModel, Mockito.times(2)).cancelFetch();
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
-        final ArrayList<Release> charts = new ArrayList<>();
-        mCaptor.getValue().onSuccess(charts);
-        Mockito.verify(mMockView).onLoadSuccess(charts);
+        final ArrayList<Release> releases = new ArrayList<>();
+        mCaptor.getValue().onSuccess(releases);
+        Mockito.verify(mMockView).onLoadSuccess(releases);
         Mockito.verifyNoMoreInteractions(mMockView);
 
-        Mockito.verify(mMockAppModel, Mockito.times(2)).persistCharts(charts);
+        Mockito.verify(mMockAppModel, Mockito.times(2)).persist(releases);
     }
 
     @Test
     public void requestCancel_dismissedLoading() {
         performSuccessfulLoadTest(1);
         mPresenter.onRequestCancel();
-        Mockito.verify(mMockAppModel).cancelFetchCharts();
+        Mockito.verify(mMockAppModel).cancelFetch();
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
-        final ArrayList<Release> charts = new ArrayList<>();
-        mCaptor.getValue().onSuccess(charts);
+        final ArrayList<Release> releases = new ArrayList<>();
+        mCaptor.getValue().onSuccess(releases);
         Mockito.verify(mMockView, Mockito.times(3)).showLoading(false);
-        Mockito.verify(mMockView, Mockito.times(2)).onLoadSuccess(charts);
+        Mockito.verify(mMockView, Mockito.times(2)).onLoadSuccess(releases);
         Mockito.verifyNoMoreInteractions(mMockView);
 
-        Mockito.verify(mMockAppModel, Mockito.times(2)).persistCharts(charts);
+        Mockito.verify(mMockAppModel, Mockito.times(2)).persist(releases);
         Mockito.verifyNoMoreInteractions(mMockAppModel);
     }
 
     @Test
     public void onRefresh_resetsModelAndPerformsLoad() {
         mPresenter.onRefresh();
-        Mockito.verify(mMockAppModel).getPersistedCharts();
+        Mockito.verify(mMockAppModel).getPersisted();
         final int invocations = 2;
         performSuccessfulLoadTest(invocations);
 
-        Mockito.verify(mMockAppModel, Mockito.times(invocations)).cancelFetchCharts();
+        Mockito.verify(mMockAppModel, Mockito.times(invocations)).cancelFetch();
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
-        final ArrayList<Release> charts = new ArrayList<>();
-        mCaptor.getValue().onSuccess(charts);
+        final ArrayList<Release> releases = new ArrayList<>();
+        mCaptor.getValue().onSuccess(releases);
         Mockito.verify(mMockView, Mockito.times(invocations)).showLoading(false);
-        Mockito.verify(mMockView, Mockito.times(invocations)).onLoadSuccess(charts);
+        Mockito.verify(mMockView, Mockito.times(invocations)).onLoadSuccess(releases);
         Mockito.verifyNoMoreInteractions(mMockView);
 
-        Mockito.verify(mMockAppModel, Mockito.times(invocations)).persistCharts(charts);
+        Mockito.verify(mMockAppModel, Mockito.times(invocations)).persist(releases);
     }
 }

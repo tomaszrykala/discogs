@@ -18,11 +18,10 @@ import dagger.Provides;
 public class MockMvpModule {
 
     @Provides
-    @Singleton
     ListMvp.ListPresenter provideListPresenter() {
         return new ListMvp.ListPresenter() {
 
-            final ArrayList<Release> mMockChartData = getMockChartData();
+            final ArrayList<Release> mMockReleaseData = getMockReleaseData();
             ListMvp.ListView mListView;
 
             @Override
@@ -32,18 +31,18 @@ public class MockMvpModule {
 
             @Override
             public void onRefresh() {
-                mListView.onLoadSuccess(mMockChartData);
+                mListView.onLoadSuccess(mMockReleaseData);
             }
 
             @Override
             public void load() {
-                mListView.onLoadSuccess(mMockChartData);
+                mListView.onLoadSuccess(mMockReleaseData);
             }
 
             @Override
             public void setView(ListMvp.ListView view) {
                 mListView = view;
-                mListView.onLoadSuccess(mMockChartData);
+                mListView.onLoadSuccess(mMockReleaseData);
             }
 
             @Override
@@ -54,19 +53,18 @@ public class MockMvpModule {
     }
 
     @Provides
-    @Singleton
     DetailMvp.DetailPresenter provideDetailPresenter() {
         return new DetailMvp.DetailPresenter() {
 
             DetailMvp.DetailView mDetailView;
 
             @Override
-            public void loadChart(String id) {
-                final ArrayList<Release> mockChartData = getMockChartData();
-                for (int i = 0; i < mockChartData.size(); i++) {
-                    final Release chart = mockChartData.get(i);
-                    if (chart.getId().equals(Integer.parseInt(id))) {
-                        mDetailView.onLoadSuccess(chart);
+            public void load(String id) {
+                final ArrayList<Release> mockReleaseData = getMockReleaseData();
+                for (int i = 0; i < mockReleaseData.size(); i++) {
+                    final Release release = mockReleaseData.get(i);
+                    if (release.getId().equals(Integer.parseInt(id))) {
+                        mDetailView.onLoadSuccess(release);
                         break;
                     }
                 }
@@ -95,22 +93,22 @@ public class MockMvpModule {
         return Mockito.mock(BaseMvp.Model.class); // TODO: or specific test impl like above :-)
     }
 
-    static ArrayList<Release> getMockChartData() {
-        final ArrayList<Release> chartArrayList = new ArrayList<>();
+    static ArrayList<Release> getMockReleaseData() {
+        final ArrayList<Release> releaseArrayList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            final Release chart = new Release();
+            final Release release = new Release();
             // final String key = String.valueOf(200 + i);
             final int id = 200 + i;
-            chart.setId(id);
+            release.setId(id);
 //            final Images images = new Images();
 //            images.set_default("https://iambloggingat.files.wordpress.com/2010/06/gerty.png?w=595");
-            // chart.setImages(images);
+            // release.setImages(images);
             // final Heading heading = new Heading();
-            chart.setArtist("Dixon and Ame :: " + id);
-            chart.setTitle("Essential Mix :: " + id);
-            // chart.setHeading(heading);
-            chartArrayList.add(chart);
+            release.setArtist("Dixon and Ame :: " + id);
+            release.setTitle("Essential Mix :: " + id);
+            // release.setHeading(heading);
+            releaseArrayList.add(release);
         }
-        return chartArrayList;
+        return releaseArrayList;
     }
 }

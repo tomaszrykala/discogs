@@ -26,7 +26,7 @@ public class RealmService {
     }
 
     public List<Release> copyFromRealm() {
-        final List<Release> releases = getCharts();
+        final List<Release> releases = getReleases();
         return mRealm.copyFromRealm(releases);
     }
 
@@ -34,41 +34,40 @@ public class RealmService {
         mRealm.close();
     }
 
-    public Release getChart(String id) {
+    public Release getRelease(String id) {
         final RealmQuery<Release> where = mRealm.where(Release.class);
         return where.equalTo("id", Integer.parseInt(id)).findFirst();
     }
 
-    public List<Release> getCharts() {
-        return mRealm.allObjects(Release.class);
+    public List<Release> getReleases() {
+        return mRealm.where(Release.class).findAll();
     }
 
-    public void setChartList(List<Release> chartList) {
-        final Iterator<Release> iterator = chartList.iterator();
-        //noinspection WhileLoopReplaceableByForEach
+    public void setReleaseList(List<Release> releaseList) {
+        final Iterator<Release> iterator = releaseList.iterator();
         while (iterator.hasNext()) {
-            final Release chart = iterator.next();
+            final Release release = iterator.next();
             try {
                 mRealm.beginTransaction();
 
-                final Release realmChart = mRealm.createObject(Release.class);
-                realmChart.setId(chart.getId());
-                realmChart.setTitle(realmChart.getTitle());
-                realmChart.setArtist(realmChart.getArtist());
+                final Release realmRelease = mRealm.createObject(Release.class);
+                realmRelease.setId(release.getId());
+                realmRelease.setTitle(release.getTitle());
+                realmRelease.setArtist(release.getArtist());
 
 //                final Images realmImages = mRealm.createObject(Images.class);
-//                realmImages._default = chart.images._default;
-//                realmChart.setImages(realmImages);
+//                realmImages._default = release.images._default;
+//                realmRelease.setImages(realmImages);
 //
 //                final Share realmShare = mRealm.createObject(Share.class);
-//                realmShare.subject = chart.share.subject;
-//                realmShare.text = chart.share.text;
-//                realmShare.href = chart.share.href;
-//                realmShare.image = chart.share.image;
-//                realmShare.twitter = chart.share.twitter;
-//                realmChart.setShare(realmShare);
+//                realmShare.subject = release.share.subject;
+//                realmShare.text = release.share.text;
+//                realmShare.href = release.share.href;
+//                realmShare.image = release.share.image;
+//                realmShare.twitter = release.share.twitter;
+//                realmRelease.setShare(realmShare);
 
-                mRealm.copyToRealmOrUpdate(realmChart);
+                mRealm.copyToRealmOrUpdate(realmRelease);
             } catch (RealmPrimaryKeyConstraintException e) {
                 Log.d(RealmService.class.getSimpleName(), e.getMessage(), e);
             } finally {

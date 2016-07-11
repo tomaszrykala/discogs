@@ -9,23 +9,23 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.tomaszrykala.discogs.R;
-import com.tomaszrykala.discogs.util.ListItem;
-import com.tomaszrykala.discogs.util.ListItem.ChartListItem;
+import com.tomaszrykala.discogs.util.ListItem.ReleaseListItem;
 
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    private final List<ChartListItem> mValues;
+    private final List<ReleaseListItem> mValues;
     private final OnListItemClickListener mListener;
 
     public interface OnListItemClickListener {
-        void onListItemClick(View itemView, ChartListItem item);
+        void onListItemClick(View itemView, ReleaseListItem item);
     }
 
-    public ListAdapter(List<ListItem.ChartListItem> items, OnListItemClickListener listener) {
+    public ListAdapter(List<ReleaseListItem> items, OnListItemClickListener listener) {
         mValues = items;
         mListener = listener;
+        notifyItemRangeInserted(0, mValues.size());
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final ListItem.ChartListItem item = mValues.get(position);
+        final ReleaseListItem item = mValues.get(position);
         holder.mItem = item;
         holder.title.setText(item.title);
         holder.artist.setText(item.artist);
@@ -58,13 +58,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView art;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        final ImageView art;
+        final TextView artist;
         public final TextView title;
-        public final TextView artist;
-        public ChartListItem mItem;
+        ReleaseListItem mItem;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             art = (ImageView) view.findViewById(R.id.art);
             title = (TextView) view.findViewById(R.id.title);

@@ -10,13 +10,13 @@ public interface BaseMvp {
 
         void reset();
 
-        Release getChart(String id);
+        Release get(String id);
 
-        List<Release> getPersistedCharts();
+        List<Release> getPersisted();
 
-        void persistCharts(List<Release> list);
+        void persist(List<Release> list);
 
-        void fetchCharts(Callback callback);
+        void fetch(Callback callback);
 
         interface Callback {
             void onSuccess(List<Release> list);
@@ -24,7 +24,7 @@ public interface BaseMvp {
             void onFail(String error);
         }
 
-        void cancelFetchCharts();
+        void cancelFetch();
     }
 
     interface View {

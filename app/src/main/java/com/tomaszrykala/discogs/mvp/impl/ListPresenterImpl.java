@@ -8,12 +8,11 @@ import java.util.List;
 
 public class ListPresenterImpl implements ListMvp.ListPresenter {
 
-    private boolean mIsRefreshing;
-
+    private final BaseMvp.Model mAppModel;
     private ListMvp.ListView mView;
 
-    private final BaseMvp.Model mAppModel;
-    private List<Release> mPersistedCharts;
+    private List<Release> mReleases;
+    private boolean mIsRefreshing;
 
     public ListPresenterImpl(BaseMvp.Model appModel) {
         mAppModel = appModel;
@@ -26,8 +25,8 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
 
     @Override
     public void onRefresh() {
-        mPersistedCharts = mAppModel.getPersistedCharts();
-        mIsRefreshing = !mPersistedCharts.isEmpty();
+        mReleases = mAppModel.getPersisted();
+        mIsRefreshing = !mReleases.isEmpty();
         if (mIsRefreshing) mAppModel.reset();
         doLoad(mIsRefreshing);
     }
@@ -45,21 +44,21 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
 
     @Override
     public void releaseView() {
-        mAppModel.cancelFetchCharts();
+        mAppModel.cancelFetch();
         mView = null;
     }
 
     private void doLoad(final boolean reset) {
         mView.showLoading(true);
-        mAppModel.cancelFetchCharts();
-        mAppModel.fetchCharts(new BaseMvp.Model.Callback() {
+        mAppModel.cancelFetch();
+        mAppModel.fetch(new BaseMvp.Model.Callback() {
             @Override
             public void onSuccess(List<Release> list) {
                 if (mView != null) {
                     mView.showLoading(false);
                     mView.onLoadSuccess(list);
                 }
-                mAppModel.persistCharts(list);
+                mAppModel.persist(list);
             }
 
             @Override
@@ -70,7 +69,7 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
                 }
 
                 if (reset) {
-                    mAppModel.persistCharts(mPersistedCharts);
+                    mAppModel.persist(mReleases);
                 }
             }
         });

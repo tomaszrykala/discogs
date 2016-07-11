@@ -62,9 +62,9 @@ public class AppJourneyTest {
 
     @Test
     public void listItemShowsCorrectData() {
-        final List<ListItem.ChartListItem> items = mActivity.getItems();
+        final List<ListItem.ReleaseListItem> items = mActivity.getItems();
         for (int i = 0; i < 5; i++) {
-            final ListItem.ChartListItem item = items.get(i);
+            final ListItem.ReleaseListItem item = items.get(i);
             onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.artist)))));
             onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.title)))));
         }
@@ -75,8 +75,8 @@ public class AppJourneyTest {
         Instrumentation.ActivityMonitor activityMonitor =
                 getInstrumentation().addMonitor(DetailActivity.class.getName(), null, false);
 
-        final List<ListItem.ChartListItem> items = mActivity.getItems();
-        final ListItem.ChartListItem item = items.get(0);
+        final List<ListItem.ReleaseListItem> items = mActivity.getItems();
+        final ListItem.ReleaseListItem item = items.get(0);
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         onView(withId(R.id.detail_artist)).check(matches(withText(item.artist)));
 
@@ -92,10 +92,10 @@ public class AppJourneyTest {
     @Test
     public void listItemIndexIsRetainedWhenGoingBackFromDetail() {
         final Matcher<View> matcher = withId(R.id.recycler_view);
-        final List<ListItem.ChartListItem> items = mActivity.getItems();
+        final List<ListItem.ReleaseListItem> items = mActivity.getItems();
         final int position = items.size() - 3;
         onView(matcher).perform(RecyclerViewActions.scrollToPosition(position));
-        final ListItem.ChartListItem item = items.get(position);
+        final ListItem.ReleaseListItem item = items.get(position);
         onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.artist)))));
         onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.title)))));
 

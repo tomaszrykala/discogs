@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.github.florent37.glidepalette.BitmapPalette;
 import com.github.florent37.glidepalette.GlidePalette;
 import com.tomaszrykala.discogs.R;
@@ -88,7 +87,7 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
 
         DiscogsApp.getInstance().getComponent().inject(this);
         mPresenter.setView(this);
-        mPresenter.loadChart(mId);
+        mPresenter.load(mId);
     }
 
     @Override protected void onDestroy() {
@@ -117,26 +116,26 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
     @Override public void onLoadFail(String error) {
         Snackbar.make(mCollapsingToolbarLayout, error, Snackbar.LENGTH_LONG).setAction("retry?", new View.OnClickListener() {
             @Override public void onClick(View v) {
-                mPresenter.loadChart(mId);
+                mPresenter.load(mId);
             }
         }).show();
     }
 
-    @Override public void onLoadSuccess(Release chart) {
+    @Override public void onLoadSuccess(Release release) {
         // art
-        final String url = null; // chart.getImages()._default;
+        final String url = null; // release.getImages()._default;
 //        Glide.with(this).load(url).centerCrop().listener(getRequestListener(url)).crossFade().into(mArt);
 
         // title
-        final String artist = chart.getArtist();
-        final String title = chart.getTitle();
+        final String artist = release.getArtist();
+        final String title = release.getTitle();
         getSupportActionBar().setTitle(title);
 
         // artist
         mArtist.setText(artist);
 
         // body
-        mBody.setText(chart.toString());
+        mBody.setText(release.toString());
     }
 
     private GlidePalette getRequestListener(String url) {

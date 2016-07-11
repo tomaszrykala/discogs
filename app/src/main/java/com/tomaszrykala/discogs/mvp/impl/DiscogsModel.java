@@ -29,23 +29,23 @@ public class DiscogsModel implements BaseMvp.Model {
     }
 
     @Override
-    public List<Release> getPersistedCharts() {
+    public List<Release> getPersisted() {
         return mRealmService.copyFromRealm();
     }
 
-    @Override public Release getChart(String id) {
-        return mRealmService.getChart(id);
+    @Override public Release get(String id) {
+        return mRealmService.getRelease(id);
     }
 
-    @Override public void fetchCharts(final Callback callback) {
-        final List<Release> charts = mRealmService.getCharts();
-        mWasModelEmpty = charts.isEmpty();
+    @Override public void fetch(final Callback callback) {
+        final List<Release> releases = mRealmService.getReleases();
+        mWasModelEmpty = releases.isEmpty();
         if (mWasModelEmpty) {
             mCall = mDiscogsService.getLabel();
             mCall.enqueue(new retrofit2.Callback<Label>() {
                 @Override public void onResponse(Call<Label> call, Response<Label> response) {
-                    final List<Release> chartList = response.body().getReleases();
-                    callback.onSuccess(chartList);
+                    final List<Release> releaseList = response.body().getReleases();
+                    callback.onSuccess(releaseList);
                     mCall = null;
                 }
 
@@ -55,19 +55,19 @@ public class DiscogsModel implements BaseMvp.Model {
                 }
             });
         } else {
-            callback.onSuccess(charts);
+            callback.onSuccess(releases);
         }
     }
 
     @Override
-    public void persistCharts(List<Release> list) {
+    public void persist(List<Release> list) {
         if (mWasModelEmpty) {
-            mRealmService.setChartList(list);
+            mRealmService.setReleaseList(list);
         }
         mWasModelEmpty = false;
     }
 
-    @Override public void cancelFetchCharts() {
+    @Override public void cancelFetch() {
         if (mCall != null) {
             mCall.cancel();
             mCall = null;
