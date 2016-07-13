@@ -1,9 +1,12 @@
 
 package com.tomaszrykala.discogs.data.model;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Comparator;
+
+import javax.annotation.Generated;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -40,163 +43,148 @@ public class Release extends RealmObject {
     @PrimaryKey
     private Integer id;
 
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final Release release = (Release) o;
+
+        if (!catno.equals(release.catno)) return false;
+
+        return true;
+    }
+
+    @Override public int hashCode() {
+        return catno.hashCode();
+    }
+
+    public static final Comparator<Release> COMPARATOR = new Comparator<Release>() {
+        @Override public int compare(Release lhs, Release rhs) {
+            return Integer.parseInt(lhs.catno) - Integer.parseInt(rhs.catno);
+        }
+    };
+
     /**
-     * 
-     * @return
-     *     The status
+     * @return The status
      */
     public String getStatus() {
         return status;
     }
 
     /**
-     * 
-     * @param status
-     *     The status
+     * @param status The status
      */
     public void setStatus(String status) {
         this.status = status;
     }
 
     /**
-     * 
-     * @return
-     *     The thumb
+     * @return The thumb
      */
     public String getThumb() {
         return thumb;
     }
 
     /**
-     * 
-     * @param thumb
-     *     The thumb
+     * @param thumb The thumb
      */
     public void setThumb(String thumb) {
         this.thumb = thumb;
     }
 
     /**
-     * 
-     * @return
-     *     The format
+     * @return The format
      */
     public String getFormat() {
         return format;
     }
 
     /**
-     * 
-     * @param format
-     *     The format
+     * @param format The format
      */
     public void setFormat(String format) {
         this.format = format;
     }
 
     /**
-     * 
-     * @return
-     *     The title
+     * @return The title
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * 
-     * @param title
-     *     The title
+     * @param title The title
      */
     public void setTitle(String title) {
         this.title = title;
     }
 
     /**
-     * 
-     * @return
-     *     The catno
+     * @return The catno
      */
     public String getCatno() {
         return catno;
     }
 
     /**
-     * 
-     * @param catno
-     *     The catno
+     * @param catno The catno
      */
     public void setCatno(String catno) {
         this.catno = catno;
     }
 
     /**
-     * 
-     * @return
-     *     The year
+     * @return The year
      */
     public Integer getYear() {
         return year;
     }
 
     /**
-     * 
-     * @param year
-     *     The year
+     * @param year The year
      */
     public void setYear(Integer year) {
         this.year = year;
     }
 
     /**
-     * 
-     * @return
-     *     The resourceUrl
+     * @return The resourceUrl
      */
     public String getResourceUrl() {
         return resourceUrl;
     }
 
     /**
-     * 
-     * @param resourceUrl
-     *     The resource_url
+     * @param resourceUrl The resource_url
      */
     public void setResourceUrl(String resourceUrl) {
         this.resourceUrl = resourceUrl;
     }
 
     /**
-     * 
-     * @return
-     *     The artist
+     * @return The artist
      */
     public String getArtist() {
         return artist;
     }
 
     /**
-     * 
-     * @param artist
-     *     The artist
+     * @param artist The artist
      */
     public void setArtist(String artist) {
         this.artist = artist;
     }
 
     /**
-     * 
-     * @return
-     *     The id
+     * @return The id
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 
-     * @param id
-     *     The id
+     * @param id The id
      */
     public void setId(Integer id) {
         this.id = id;

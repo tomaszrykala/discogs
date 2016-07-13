@@ -6,7 +6,11 @@ import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.data.remote.DiscogsService;
 import com.tomaszrykala.discogs.mvp.BaseMvp;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -44,8 +48,14 @@ public class DiscogsModel implements BaseMvp.Model {
             mCall = mDiscogsService.getLabel();
             mCall.enqueue(new retrofit2.Callback<Label>() {
                 @Override public void onResponse(Call<Label> call, Response<Label> response) {
-                    final List<Release> releaseList = response.body().getReleases();
-                    callback.onSuccess(releaseList);
+                    final Label label = response.body();
+                    // final int pages = label.getPagination().getPages(); // TODO: chain calls?
+
+                    final List<Release> releaseList = label.getReleases();
+                    final Set<Release> releaseSet = new HashSet<>(releaseList);
+                    final List<Release> releaseSortedList = new ArrayList<>(releaseSet);
+                    Collections.sort(releaseSortedList, Release.COMPARATOR);
+                    callback.onSuccess(releaseSortedList);
                     mCall = null;
                 }
 
