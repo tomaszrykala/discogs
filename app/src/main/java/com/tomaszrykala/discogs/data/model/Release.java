@@ -1,6 +1,8 @@
 
 package com.tomaszrykala.discogs.data.model;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -27,6 +29,7 @@ public class Release extends RealmObject {
     @Expose
     private String title;
     @SerializedName("catno")
+    @Nullable
     @Expose
     private String catno;
     @SerializedName("year")
@@ -49,13 +52,13 @@ public class Release extends RealmObject {
 
         final Release release = (Release) o;
 
-        if (!catno.equals(release.catno)) return false;
+        if (catno != null ? !catno.equals(release.catno) : release.catno != null) return false;
 
         return true;
     }
 
     @Override public int hashCode() {
-        return catno.hashCode();
+        return catno != null ? catno.hashCode() : 0;
     }
 
     public static final Comparator<Release> COMPARATOR = new Comparator<Release>() {
