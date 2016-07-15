@@ -21,10 +21,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.github.florent37.glidepalette.BitmapPalette;
 import com.github.florent37.glidepalette.GlidePalette;
-import com.tomaszrykala.discogs.R;
 import com.tomaszrykala.discogs.DiscogsApp;
+import com.tomaszrykala.discogs.R;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.DetailMvp;
 
@@ -123,8 +124,10 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
 
     @Override public void onLoadSuccess(Release release) {
         // art
-        final String url = null; // release.getImages()._default;
-//        Glide.with(this).load(url).centerCrop().listener(getRequestListener(url)).crossFade().into(mArt);
+        final String url = release.getThumb();
+        final GlidePalette requestListener = getRequestListener(url);
+        //noinspection unchecked
+         Glide.with(this).load(url).centerCrop().listener(requestListener).crossFade().into(mArt);
 
         // title
         final String artist = release.getArtist();

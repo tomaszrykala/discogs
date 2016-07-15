@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.tomaszrykala.discogs.DiscogsApp;
 import com.tomaszrykala.discogs.R;
@@ -78,9 +79,8 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     @Override public void onListItemClick(View itemView, final ListItem.ReleaseListItem item) {
         final Pair<View, String> pairToolbar =
                 new Pair<>(itemView.findViewById(R.id.title), getString(R.string.transition_toolbar));
-        final View view = itemView.findViewById(R.id.art);
-        final Pair<View, String> pairArt =
-                new Pair<>(view, getString(R.string.transition_art));
+        final ImageView pairThumbnail = (ImageView) itemView.findViewById(R.id.art);
+        final Pair<ImageView, String> pairArt = new Pair<>(pairThumbnail, getString(R.string.transition_art));
         final Pair[] pairs = {pairToolbar, pairArt};
 
         @SuppressWarnings("unchecked")

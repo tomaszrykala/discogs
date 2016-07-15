@@ -54,6 +54,7 @@ public class RealmService {
                 realmRelease.setId(release.getId());
                 realmRelease.setTitle(release.getTitle());
                 realmRelease.setArtist(release.getArtist());
+                realmRelease.setThumb(release.getThumb());
 
 //                final Images realmImages = mRealm.createObject(Images.class);
 //                realmImages._default = release.images._default;

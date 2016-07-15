@@ -14,8 +14,8 @@ public class ListItem {
             final String key = String.valueOf(release.getId());
             final String title = release.getTitle();
             final String artist = release.getArtist();
-            // final String aDefault = images.get_default();
-            final ReleaseListItem item = new ReleaseListItem(key, title, artist, null);
+            final String artUrl = release.getThumb();
+            final ReleaseListItem item = new ReleaseListItem(key, title, artist, artUrl);
             items.add(item);
         }
         return items;

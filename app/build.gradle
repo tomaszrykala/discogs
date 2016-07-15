@@ -27,6 +27,16 @@ android {
     }
 }
 
+// credit: http://www.rainbowbreeze.it/environmental-variables-api-key-and-secret-buildconfig-and-android-studio/
+def DISCOGS_CONSUMER_KEY = '"' + DiscogsConsumerKey + '"' ?: '"Define Discogs Consumer key"';
+def DISCOGS_CONSUMER_SECRET = '"' + DiscogsConsumerSecret + '"' ?: '"Define Discogs Consumer secret"';
+
+android.buildTypes.each {
+    type ->
+        type.buildConfigField 'String', 'DISCOGS_CONSUMER_KEY', DISCOGS_CONSUMER_KEY
+        type.buildConfigField 'String', 'DISCOGS_CONSUMER_SECRET', DISCOGS_CONSUMER_SECRET
+}
+
 dependencies {
     final DEXMAKER_VERSION = '1.2'
     final SUPPORT_LIB_VERSION = '23.2.1'

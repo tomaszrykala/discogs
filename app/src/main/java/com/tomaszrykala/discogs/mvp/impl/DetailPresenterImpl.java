@@ -29,9 +29,7 @@ public class DetailPresenterImpl implements DetailMvp.DetailPresenter {
     @Override
     public void onFabClick() {
         if (mRelease != null && mRelease.getArtist() != null) {
-            final String share = mRelease.getArtist();
-            mView.share("\"Tweet\" sent:\n" + share);
-//            mView.share("\"Tweet\" sent:\n" + share.text + " - " + share.href);
+            mView.share("\"Tweet\" sent:\n" + mRelease.toString());
         } else {
             mView.share("Failed to share track.");
         }
