@@ -25,7 +25,7 @@ public class ListPresenterImplTest {
     @Mock
     BaseMvp.Model mMockAppModel;
 
-    ListMvp.ListPresenter mPresenter;
+    private ListMvp.ListPresenter mPresenter;
 
     @Captor
     ArgumentCaptor<ListMvp.Model.Callback> mCaptor;

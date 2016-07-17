@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class DetailPresenterTest {
+public class DetailPresenterImplTest {
 
     @Mock
     DetailMvp.DetailView mMockView;
@@ -102,23 +102,20 @@ public class DetailPresenterTest {
     @Test
     public void onFabClick_validReleaseShares() {
         final String id = "000";
-        final Release Release = new Release();
-        Release.setId(Integer.parseInt(id));
-//        final Share share = new Share();
-//        share.text = "Material Girl";
-//        share.href = "www.web.com";
-//        Release.setShare(share);
-//        Mockito.when(mMockAppModel.getRelease(id)).thenReturn(Release);
-//        final String expected = "\"Tweet\" sent:\n" + share.text + " - " + share.href;
+        final Release release = new Release();
+        release.setId(Integer.parseInt(id));
+        release.setArtist("Madonna");
+        Mockito.when(mMockAppModel.get(id)).thenReturn(release);
+        final String expected = "\"Tweet\" sent:\n" + release;
 
         mPresenter.load(id);
         Mockito.verify(mMockAppModel).get(id);
         Mockito.verifyNoMoreInteractions(mMockAppModel);
-        Mockito.verify(mMockView).onLoadSuccess(Release);
+        Mockito.verify(mMockView).onLoadSuccess(release);
         Mockito.verifyNoMoreInteractions(mMockView);
 
         mPresenter.onFabClick();
-//        Mockito.verify(mMockView).share(expected);
+        Mockito.verify(mMockView).share(expected);
         Mockito.verifyNoMoreInteractions(mMockView);
     }
 
