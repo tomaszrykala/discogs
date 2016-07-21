@@ -1,5 +1,6 @@
 package com.tomaszrykala.discogs.dagger.module;
 
+import com.google.gson.GsonBuilder;
 import com.tomaszrykala.discogs.data.local.RealmService;
 import com.tomaszrykala.discogs.data.remote.DiscogsService;
 
@@ -8,23 +9,36 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class ModelModule {
 
-    @Provides @Singleton Realm provideRealm() {
-        return Realm.getDefaultInstance();
-    }
-
     @Provides
-    @Singleton RealmService provideRealmService(final Realm realm) {
-        return new RealmService(realm);
+    @Singleton
+    RealmService provideRealmService() {
+        return new RealmService(Realm.getDefaultInstance());
     }
 
     @Provides
     @Singleton
     DiscogsService provideDiscogsService() {
-        return DiscogsService.Creator.create();
+        return Creator.create();
     }
 
+    private static class Creator {
+
+        static final String ENDPOINT = "http://api.discogs.com/";
+
+        public static DiscogsService create() {
+
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                    .build();
+
+            return retrofit.create(DiscogsService.class);
+        }
+    }
 }

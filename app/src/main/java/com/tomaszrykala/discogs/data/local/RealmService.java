@@ -56,18 +56,6 @@ public class RealmService {
                 realmRelease.setArtist(release.getArtist());
                 realmRelease.setThumb(release.getThumb());
 
-//                final Images realmImages = mRealm.createObject(Images.class);
-//                realmImages._default = release.images._default;
-//                realmRelease.setImages(realmImages);
-//
-//                final Share realmShare = mRealm.createObject(Share.class);
-//                realmShare.subject = release.share.subject;
-//                realmShare.text = release.share.text;
-//                realmShare.href = release.share.href;
-//                realmShare.image = release.share.image;
-//                realmShare.twitter = release.share.twitter;
-//                realmRelease.setShare(realmShare);
-
                 mRealm.copyToRealmOrUpdate(realmRelease);
             } catch (RealmPrimaryKeyConstraintException e) {
                 Log.d(RealmService.class.getSimpleName(), e.getMessage(), e);

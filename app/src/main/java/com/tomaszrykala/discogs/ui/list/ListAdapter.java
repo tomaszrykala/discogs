@@ -13,16 +13,16 @@ import com.tomaszrykala.discogs.util.ListItem.ReleaseListItem;
 
 import java.util.List;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private final List<ReleaseListItem> mValues;
     private final OnListItemClickListener mListener;
 
-    public interface OnListItemClickListener {
+    interface OnListItemClickListener {
         void onListItemClick(View itemView, ReleaseListItem item);
     }
 
-    public ListAdapter(List<ReleaseListItem> items, OnListItemClickListener listener) {
+    ListAdapter(List<ReleaseListItem> items, OnListItemClickListener listener) {
         mValues = items;
         mListener = listener;
         notifyItemRangeInserted(0, mValues.size());
