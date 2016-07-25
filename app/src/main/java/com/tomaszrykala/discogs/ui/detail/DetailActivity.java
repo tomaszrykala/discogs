@@ -40,7 +40,8 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private NestedScrollView mBackground;
     private FloatingActionButton mFab;
-    private TextView mArtist, mBody;
+//    private TextView mArtist;
+    private TextView mBody;
     private ImageView mArt;
     private String mId;
 
@@ -56,7 +57,7 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
 
         mArt = (ImageView) findViewById(R.id.toolbar_art);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mArtist = (TextView) findViewById(R.id.detail_artist);
+//        mArtist = (TextView) findViewById(R.id.detail_artist);
         mBody = (TextView) findViewById(R.id.detail_body);
         mBackground = (NestedScrollView) findViewById(R.id.detail_body_background);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
@@ -127,16 +128,17 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         final String url = release.getThumb();
         final GlidePalette requestListener = getRequestListener(url);
         //noinspection unchecked
-         Glide.with(this).load(url).centerCrop().listener(requestListener).crossFade().into(mArt);
+         Glide.with(this).load(url).centerCrop().listener(requestListener).crossFade().error(R.drawable.discogs_logo)
+                 .into(mArt);
 
         // title
         final String artist = release.getArtist();
-        final String title = release.getTitle();
-        getSupportActionBar().setTitle(title);
+//        final String title = release.getTitle();
+        getSupportActionBar().setTitle(artist);
 
         // artist
-        mArtist.setText(artist);
-
+//        mArtist.setText(artist);
+//
         // body
         mBody.setText(release.toString());
     }
@@ -154,12 +156,13 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
                                 final int vibrantSwatchRgb = darkVibrantSwatch.getRgb();
                                 mCollapsingToolbarLayout.setContentScrimColor(vibrantSwatchRgb);
                                 mCollapsingToolbarLayout.setStatusBarScrimColor(vibrantSwatchRgb);
-                                mArtist.setBackgroundColor(darkVibrantSwatch.getRgb());
-                                mArtist.setTextColor(darkVibrantSwatch.getTitleTextColor());
+//                                mArtist.setBackgroundColor(darkVibrantSwatch.getRgb());
+//                                mArtist.setTextColor(darkVibrantSwatch.getTitleTextColor());
+                                mFab.setBackgroundTintList(ColorStateList.valueOf(vibrantSwatchRgb));
 
                                 // accent color
                                 final int lightVibrantSwatchRgb = lightVibrantSwatch.getRgb();
-                                mFab.setBackgroundTintList(ColorStateList.valueOf(lightVibrantSwatchRgb));
+//                                mFab.setBackgroundTintList(ColorStateList.valueOf(lightVibrantSwatchRgb));
                                 mBackground.setBackgroundColor(lightVibrantSwatchRgb);
                                 return;
                             }

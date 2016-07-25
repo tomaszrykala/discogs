@@ -41,7 +41,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.mItem = item;
         holder.title.setText(item.title);
         holder.artist.setText(item.artist);
-        Glide.with(holder.art.getContext()).load(item.artUrl).centerCrop().crossFade().into(holder.art);
+        Glide.with(holder.art.getContext()).load(item.artUrl).centerCrop().crossFade().error(R.drawable.discogs_logo)
+                .into(holder.art);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

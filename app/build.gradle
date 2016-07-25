@@ -27,9 +27,17 @@ android {
     }
 }
 
-// credit: http://www.rainbowbreeze.it/environmental-variables-api-key-and-secret-buildconfig-and-android-studio/
-def DISCOGS_CONSUMER_KEY = '"' + DiscogsConsumerKey + '"' ?: '"Define Discogs Consumer key"';
-def DISCOGS_CONSUMER_SECRET = '"' + DiscogsConsumerSecret + '"' ?: '"Define Discogs Consumer secret"';
+def consumerKey
+def consumerSecret
+try {
+    consumerKey = DiscogsConsumerKey
+    consumerSecret = DiscogsConsumerSecret
+} catch (Throwable t) {
+    consumerKey = ""
+    consumerSecret = ""
+}
+def DISCOGS_CONSUMER_KEY = '"' + consumerKey + '"' ?: '"Define Discogs Consumer key"';
+def DISCOGS_CONSUMER_SECRET = '"' + consumerSecret + '"' ?: '"Define Discogs Consumer secret"';
 
 android.buildTypes.each {
     type ->
