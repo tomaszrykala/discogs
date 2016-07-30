@@ -6,45 +6,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorAccent"
+    android:background="?colorPrimary"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.detail.DetailActivity"
     tools:showIn="@layout/activity_detail">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/margin_base">
 
-        <!--<TextView-->
-        <!--android:id="@+id/detail_artist"-->
-        <!--style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="?colorPrimary"-->
-        <!--android:ellipsize="end"-->
-        <!--android:gravity="bottom|start"-->
-        <!--android:maxLines="2"-->
-        <!--android:padding="@dimen/margin_double"-->
-        <!--android:paddingEnd="80dp"-->
-        <!--android:paddingStart="@dimen/margin_double"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--tools:text="Innervisions bosses Ame and Dixon take control of the first X Series Essential Mix of 2016"/>-->
-
-        <android.support.v7.widget.CardView
+        <TextView
+            android:id="@+id/detail_body"
+            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_base"
-            android:background="@color/cardview_light_background">
-
-            <TextView
-                android:id="@+id/detail_body"
-                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/margin_base"
-                tools:text="@string/large_text"/>
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
-
+            android:padding="@dimen/margin_base"
+            tools:text="@string/large_text"/>
+    </android.support.v7.widget.CardView>
 </android.support.v4.widget.NestedScrollView>

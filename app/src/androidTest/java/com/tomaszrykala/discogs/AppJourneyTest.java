@@ -78,7 +78,6 @@ public class AppJourneyTest {
         final List<ListItem.ReleaseListItem> items = mActivity.getItems();
         final ListItem.ReleaseListItem item = items.get(0);
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        onView(withId(R.id.detail_artist)).check(matches(withText(item.artist)));
 
         final int monitorHits = activityMonitor.getHits();
         Assert.assertEquals(1, monitorHits);
@@ -86,7 +85,7 @@ public class AppJourneyTest {
         Assert.assertTrue(activity instanceof DetailActivity);
         final DetailActivity detailActivity = (DetailActivity) activity;
         final CharSequence title = detailActivity.getSupportActionBar().getTitle();
-        Assert.assertTrue(title.toString().equals(item.title.toString()));
+        Assert.assertTrue(title.toString().equals(item.artist.toString()));
     }
 
     @Test
