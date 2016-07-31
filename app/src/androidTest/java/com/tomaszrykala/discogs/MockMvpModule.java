@@ -102,6 +102,13 @@ class MockMvpModule {
             release.setThumb("");
             release.setArtist("Dixon and Ame :: " + id);
             release.setTitle("Essential Mix :: " + id);
+
+            // TODO
+//            realmRelease.setYear(release.getYear());
+//            realmRelease.setCatno(release.getCatno());
+//            realmRelease.setFormat(release.getFormat());
+//            realmRelease.setResourceUrl(release.getResourceUrl());
+
             releaseArrayList.add(release);
         }
         return releaseArrayList;

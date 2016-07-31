@@ -195,9 +195,13 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
     // TODO: Implementation should be hidden, just interface is of interest
     private List<ListItem> toReleaseListItems(Release release) {
         List<ListItem> items = new ArrayList<>();
-        items.add(new ReleaseListItem(null, "Cat no.", String.valueOf(release.getId()), null));
+        items.add(new ReleaseListItem(null, "Discogs id", String.valueOf(release.getId()), null));
         items.add(new ReleaseListItem(null, "Title", release.getTitle(), null));
         items.add(new ReleaseListItem(null, "Artist", release.getArtist(), null));
+        items.add(new ReleaseListItem(null, "Year", String.valueOf(release.getYear()), null));
+        items.add(new ReleaseListItem(null, "Catalogue no", release.getCatno(), null));
+        items.add(new ReleaseListItem(null, "Format", release.getFormat(), null));
+        items.add(new ReleaseListItem(null, "Resource url", release.getResourceUrl(), null));
         return items;
     }
 }

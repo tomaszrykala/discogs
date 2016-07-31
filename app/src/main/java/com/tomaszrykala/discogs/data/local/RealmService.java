@@ -55,6 +55,10 @@ public class RealmService {
                 realmRelease.setTitle(release.getTitle());
                 realmRelease.setArtist(release.getArtist());
                 realmRelease.setThumb(release.getThumb());
+                realmRelease.setYear(release.getYear());
+                realmRelease.setCatno(release.getCatno());
+                realmRelease.setFormat(release.getFormat());
+                realmRelease.setResourceUrl(release.getResourceUrl());
 
                 mRealm.copyToRealmOrUpdate(realmRelease);
             } catch (RealmPrimaryKeyConstraintException e) {

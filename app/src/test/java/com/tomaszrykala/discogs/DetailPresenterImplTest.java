@@ -105,6 +105,13 @@ public class DetailPresenterImplTest {
         final Release release = new Release();
         release.setId(Integer.parseInt(id));
         release.setArtist("Madonna");
+
+        // TODO
+//        realmRelease.setYear(release.getYear());
+//        realmRelease.setCatno(release.getCatno());
+//        realmRelease.setFormat(release.getFormat());
+//        realmRelease.setResourceUrl(release.getResourceUrl());
+
         Mockito.when(mMockAppModel.get(id)).thenReturn(release);
         final String expected = "\"Tweet\" sent:\n" + release;
 
