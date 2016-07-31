@@ -40,8 +40,8 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         final ListItem item = mValues.get(position);
         holder.title.setText(item.getTitle());
         holder.artist.setText(item.getSubtitle());
-        Glide.with(holder.art.getContext()).load(item.getThumbUrl()).centerCrop().crossFade().error(R.drawable.discogs_logo)
-                .into(holder.art);
+        Glide.with(holder.art.getContext()).load(item.getThumbUrl()).centerCrop().crossFade()
+                .error(R.mipmap.ic_launcher).into(holder.art);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

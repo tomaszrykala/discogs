@@ -93,20 +93,15 @@ public class MockMvpModule {
         return Mockito.mock(BaseMvp.Model.class); // TODO: or specific test impl like above :-)
     }
 
-    static ArrayList<Release> getMockReleaseData() {
+    private ArrayList<Release> getMockReleaseData() {
         final ArrayList<Release> releaseArrayList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             final Release release = new Release();
-            // final String key = String.valueOf(200 + i);
             final int id = 200 + i;
             release.setId(id);
-//            final Images images = new Images();
-//            images.set_default("https://iambloggingat.files.wordpress.com/2010/06/gerty.png?w=595");
-            // release.setImages(images);
-            // final Heading heading = new Heading();
+            release.setThumb("");
             release.setArtist("Dixon and Ame :: " + id);
             release.setTitle("Essential Mix :: " + id);
-            // release.setHeading(heading);
             releaseArrayList.add(release);
         }
         return releaseArrayList;

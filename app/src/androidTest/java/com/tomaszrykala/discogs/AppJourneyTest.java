@@ -11,7 +11,6 @@ import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.RecyclerView;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.tomaszrykala.discogs.dagger.component.AppComponent;
@@ -39,11 +38,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-@LargeTest
 @RunWith(AndroidJUnit4.class)
 public class AppJourneyTest {
 
-    @Rule public ActivityTestRule<ListActivity> activityRule = new ActivityTestRule<>(ListActivity.class, true, false);
+    @Rule
+    public ActivityTestRule<ListActivity> activityRule = new ActivityTestRule<>(ListActivity.class, true, false);
     private ListActivity mActivity;
 
     @Before
@@ -85,7 +84,7 @@ public class AppJourneyTest {
         Assert.assertTrue(activity instanceof DetailActivity);
         final DetailActivity detailActivity = (DetailActivity) activity;
         final CharSequence title = detailActivity.getSupportActionBar().getTitle();
-        Assert.assertTrue(title.toString().equals(item.getSubtitle().toString()));
+        Assert.assertTrue(title.toString().equals(item.getSubtitle()));
     }
 
     @Test
@@ -120,11 +119,7 @@ public class AppJourneyTest {
             @Override
             protected boolean matchesSafely(final RecyclerView view) {
                 RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(position);
-                if (viewHolder == null) {
-                    // has no item on such position
-                    return false;
-                }
-                return itemMatcher.matches(viewHolder.itemView);
+                return viewHolder != null && itemMatcher.matches(viewHolder.itemView);
             }
         };
     }

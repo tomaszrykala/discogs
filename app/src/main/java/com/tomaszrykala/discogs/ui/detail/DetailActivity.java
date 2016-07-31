@@ -36,15 +36,14 @@ import javax.inject.Inject;
 public class DetailActivity extends AppCompatActivity implements DetailMvp.DetailView {
 
     public static final String ID = "ID";
-
+    @Inject
+    DetailMvp.DetailPresenter mPresenter;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private NestedScrollView mBackground;
     private FloatingActionButton mFab;
     private TextView mBody;
     private ImageView mArt;
     private String mId;
-
-    @Inject DetailMvp.DetailPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +60,8 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         mFab.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mPresenter.onFabClick();
             }
         });
@@ -90,7 +90,8 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         mPresenter.load(mId);
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         mPresenter.releaseView();
     }
@@ -109,26 +110,30 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         appBar.setLayoutParams(params);
     }
 
-    @Override public void showLoading(boolean isLoading) {
+    @Override
+    public void showLoading(boolean isLoading) {
         // no-op
     }
 
-    @Override public void onLoadFail(String error) {
+    @Override
+    public void onLoadFail(String error) {
         Snackbar.make(mCollapsingToolbarLayout, error, Snackbar.LENGTH_LONG).setAction("retry?", new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mPresenter.load(mId);
             }
         }).show();
     }
 
-    @Override public void onLoadSuccess(Release release) {
+    @Override
+    public void onLoadSuccess(Release release) {
         // art
         final String url = release.getThumb();
         final GlidePalette requestListener = getRequestListener(url);
 
         //noinspection unchecked
-        Glide.with(this).load(url).centerCrop().listener(requestListener).crossFade().error(R.drawable.discogs_logo)
-                .into(mArt);
+        Glide.with(this).load(url).centerCrop().listener(requestListener).crossFade()
+                .error(R.mipmap.ic_launcher).into(mArt);
 
         // title
         final String artist = release.getArtist();
@@ -141,7 +146,8 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
     private GlidePalette getRequestListener(String url) {
         return GlidePalette.with(url)
                 .intoCallBack(new BitmapPalette.CallBack() {
-                    @Override public void onPaletteLoaded(@Nullable Palette palette) {
+                    @Override
+                    public void onPaletteLoaded(@Nullable Palette palette) {
                         if (palette != null) {
                             final Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
                             final Palette.Swatch lightVibrantSwatch = palette.getLightVibrantSwatch();
@@ -158,7 +164,8 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
                 });
     }
 
-    @Override public void share(String message) {
+    @Override
+    public void share(String message) {
         Toast.makeText(DetailActivity.this, message, Toast.LENGTH_LONG).show();
     }
 }
