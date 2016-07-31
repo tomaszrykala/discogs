@@ -36,11 +36,13 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Inject ListMvp.ListPresenter mPresenter;
+    @Inject
+    ListMvp.ListPresenter mPresenter;
 
     private List<ListItem> mItems;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
@@ -57,28 +59,34 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
         mPresenter.setView(this);
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         mPresenter.releaseView();
     }
 
-    @Override public void showLoading(final boolean isLoading) {
+    @Override
+    public void showLoading(final boolean isLoading) {
         mSwipeRefreshLayout.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 mSwipeRefreshLayout.setRefreshing(isLoading);
             }
         });
     }
 
-    @Override public void onLoadSuccess(List<Release> list) {
+    @Override
+    public void onLoadSuccess(List<Release> list) {
         setupListAdapter(list);
     }
 
-    @Override public void onLoadFail(String error) {
+    @Override
+    public void onLoadFail(String error) {
         requestRefresh(error, "Retry");
     }
 
-    @Override public void onListItemClick(View itemView, final ListItem item) {
+    @Override
+    public void onListItemClick(View itemView, final ListItem item) {
         final Pair<View, String> pairToolbar =
                 new Pair<>(itemView.findViewById(R.id.title), getString(R.string.transition_toolbar));
         final ImageView pairThumbnail = (ImageView) itemView.findViewById(R.id.art);
@@ -92,7 +100,8 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
         ActivityCompat.startActivity(this, intent, transition.toBundle());
     }
 
-    @Override public void onRefresh() {
+    @Override
+    public void onRefresh() {
         requestRefresh("Refresh?", "Yes");
     }
 
@@ -119,12 +128,14 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     private void requestRefresh(String message, String action) {
         Snackbar.make(mRecyclerView, message, Snackbar.LENGTH_LONG)
                 .setAction(action, new View.OnClickListener() {
-                    @Override public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
                         mPresenter.onRefresh();
                     }
                 })
                 .setCallback(new Snackbar.Callback() {
-                    @Override public void onDismissed(Snackbar snackbar, int event) {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
                         super.onDismissed(snackbar, event);
                         if (event == DISMISS_EVENT_TIMEOUT) {
                             mPresenter.onRequestCancel();
@@ -140,7 +151,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     }
 
     // TODO: Implementation should be hidden, just interface is of interest
-    private static List<ListItem> toReleaseListItems(List<Release> releases) {
+    private List<ListItem> toReleaseListItems(List<Release> releases) {
         List<ListItem> items = new ArrayList<>();
         for (int i = 0, size = releases.size(); i < size; i++) {
             final Release release = releases.get(i);

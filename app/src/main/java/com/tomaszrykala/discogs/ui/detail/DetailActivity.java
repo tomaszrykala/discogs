@@ -10,15 +10,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -26,9 +26,14 @@ import com.github.florent37.glidepalette.BitmapPalette;
 import com.github.florent37.glidepalette.GlidePalette;
 import com.tomaszrykala.discogs.DiscogsApp;
 import com.tomaszrykala.discogs.R;
+import com.tomaszrykala.discogs.data.ListItem;
+import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.DetailMvp;
+import com.tomaszrykala.discogs.ui.list.ListAdapter;
+import com.tomaszrykala.discogs.util.DividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -39,9 +44,8 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
     @Inject
     DetailMvp.DetailPresenter mPresenter;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private NestedScrollView mBackground;
+    private View mBackground;
     private FloatingActionButton mFab;
-    private TextView mBody;
     private ImageView mArt;
     private String mId;
 
@@ -55,8 +59,7 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
 
         mArt = (ImageView) findViewById(R.id.toolbar_art);
         mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mBody = (TextView) findViewById(R.id.detail_body);
-        mBackground = (NestedScrollView) findViewById(R.id.detail_body_background);
+        mBackground = findViewById(R.id.detail_body_background);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
         mFab.setOnClickListener(new View.OnClickListener() {
@@ -140,8 +143,18 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         getSupportActionBar().setTitle(artist);
 
         // body
-        mBody.setText(release.toString());
+        setupListAdapter(release);
     }
+
+    private void setupListAdapter(Release release) {
+        final List<ListItem> listItems = toReleaseListItems(release);
+
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.setAdapter(new ListAdapter(listItems, null));
+    }
+
 
     private GlidePalette getRequestListener(String url) {
         return GlidePalette.with(url)
@@ -149,12 +162,21 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
                     @Override
                     public void onPaletteLoaded(@Nullable Palette palette) {
                         if (palette != null) {
+                            final Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
                             final Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
                             final Palette.Swatch lightVibrantSwatch = palette.getLightVibrantSwatch();
-                            if (darkVibrantSwatch != null && lightVibrantSwatch != null) {
+                            if (vibrantSwatch != null && darkVibrantSwatch != null && lightVibrantSwatch != null) {
 
                                 // primary color
-                                mBackground.setBackgroundColor(darkVibrantSwatch.getRgb());
+                                final int vibrant = vibrantSwatch.getRgb();
+                                final int darkVibrant = darkVibrantSwatch.getRgb();
+                                mBackground.setBackgroundColor(vibrant);
+                                mCollapsingToolbarLayout.setContentScrimColor(vibrant);
+                                mCollapsingToolbarLayout.setStatusBarScrimColor(darkVibrant);
+
+                                final int titleTextColor = vibrantSwatch.getTitleTextColor();
+                                mCollapsingToolbarLayout.setExpandedTitleColor(titleTextColor);
+                                mCollapsingToolbarLayout.setCollapsedTitleTextColor(titleTextColor);
 
                                 // accent color
                                 mFab.setBackgroundTintList(ColorStateList.valueOf(lightVibrantSwatch.getRgb()));
@@ -167,5 +189,14 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
     @Override
     public void share(String message) {
         Toast.makeText(DetailActivity.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    // TODO: Implementation should be hidden, just interface is of interest
+    private List<ListItem> toReleaseListItems(Release release) {
+        List<ListItem> items = new ArrayList<>();
+        items.add(new ReleaseListItem(null, "key", String.valueOf(release.getId()), null));
+        items.add(new ReleaseListItem(null, "title", release.getTitle(), null));
+        items.add(new ReleaseListItem(null, "artist", release.getArtist(), null));
+        return items;
     }
 }

@@ -1,5 +1,7 @@
 package com.tomaszrykala.discogs.ui.list;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +15,18 @@ import com.tomaszrykala.discogs.data.ListItem;
 
 import java.util.List;
 
-class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
+    @NonNull
     private final List<ListItem> mValues;
+    @Nullable
     private final OnListItemClickListener mListener;
 
     interface OnListItemClickListener {
         void onListItemClick(View itemView, ListItem item);
     }
 
-    ListAdapter(List<ListItem> items, OnListItemClickListener listener) {
+    public ListAdapter(@NonNull List<ListItem> items, @Nullable OnListItemClickListener listener) {
         mValues = items;
         mListener = listener;
         notifyItemRangeInserted(0, mValues.size());
