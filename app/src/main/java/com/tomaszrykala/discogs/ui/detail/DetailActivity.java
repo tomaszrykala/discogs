@@ -26,12 +26,12 @@ import com.github.florent37.glidepalette.BitmapPalette;
 import com.github.florent37.glidepalette.GlidePalette;
 import com.tomaszrykala.discogs.DiscogsApp;
 import com.tomaszrykala.discogs.R;
+import com.tomaszrykala.discogs.adapter.DividerItemDecoration;
+import com.tomaszrykala.discogs.adapter.ListAdapter;
 import com.tomaszrykala.discogs.data.ListItem;
 import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.DetailMvp;
-import com.tomaszrykala.discogs.adapter.ListAdapter;
-import com.tomaszrykala.discogs.adapter.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,9 +195,9 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
     // TODO: Implementation should be hidden, just interface is of interest
     private List<ListItem> toReleaseListItems(Release release) {
         List<ListItem> items = new ArrayList<>();
-        items.add(new ReleaseListItem(null, "key", String.valueOf(release.getId()), null));
-        items.add(new ReleaseListItem(null, "title", release.getTitle(), null));
-        items.add(new ReleaseListItem(null, "artist", release.getArtist(), null));
+        items.add(new ReleaseListItem(null, "Cat no.", String.valueOf(release.getId()), null));
+        items.add(new ReleaseListItem(null, "Title", release.getTitle(), null));
+        items.add(new ReleaseListItem(null, "Artist", release.getArtist(), null));
         return items;
     }
 }

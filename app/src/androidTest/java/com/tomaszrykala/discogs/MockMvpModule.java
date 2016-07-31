@@ -15,7 +15,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class MockMvpModule {
+class MockMvpModule {
 
     @Provides
     ListMvp.ListPresenter provideListPresenter() {
@@ -90,7 +90,7 @@ public class MockMvpModule {
     @Provides
     @Singleton
     BaseMvp.Model provideDiscogsModel() {
-        return Mockito.mock(BaseMvp.Model.class); // TODO: or specific test impl like above :-)
+        return Mockito.mock(BaseMvp.Model.class); // ...or specific test impl like above
     }
 
     private ArrayList<Release> getMockReleaseData() {
