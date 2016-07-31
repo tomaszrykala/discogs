@@ -1,4 +1,4 @@
-package com.tomaszrykala.discogs.util;
+package com.tomaszrykala.discogs.adapter;
 
 import android.content.Context;
 import android.content.res.TypedArray;

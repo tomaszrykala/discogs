@@ -1,11 +1,14 @@
-package com.tomaszrykala.discogs.ui.list;
+package com.tomaszrykala.discogs.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,18 +20,26 @@ import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    @NonNull
-    private final List<ListItem> mValues;
-    @Nullable
-    private final OnListItemClickListener mListener;
+    private boolean mAnimateItems;
+    private int mLastItemAnimated = -1;
+    private boolean mAnimationDone = false;
 
-    interface OnListItemClickListener {
+    @NonNull private final List<ListItem> mValues;
+    @Nullable private final OnListItemClickListener mListener;
+
+    public interface OnListItemClickListener {
         void onListItemClick(View itemView, ListItem item);
     }
 
     public ListAdapter(@NonNull List<ListItem> items, @Nullable OnListItemClickListener listener) {
+        this(items, listener, true);
+    }
+
+    public ListAdapter(@NonNull List<ListItem> items, @Nullable OnListItemClickListener listener,
+                       boolean animateItems) {
         mValues = items;
         mListener = listener;
+        mAnimateItems = animateItems;
         notifyItemRangeInserted(0, mValues.size());
     }
 
@@ -55,11 +66,37 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 }
             }
         });
+
+        if (mAnimateItems) runEnterAnimation(holder.itemView, position);
     }
+
 
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    private void runEnterAnimation(@NonNull View view, int position) {
+        if (mAnimationDone) return;
+
+        if (position > mLastItemAnimated) {
+            mLastItemAnimated = position;
+            view.setTranslationY(300);
+            view.setAlpha(0.f);
+            view.animate()
+                    .translationY(0).alpha(1.f)
+                    .setStartDelay(20 * position)
+                    .setInterpolator(new DecelerateInterpolator(2.f))
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mAnimationDone = true;
+                        }
+                    })
+                    .start();
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

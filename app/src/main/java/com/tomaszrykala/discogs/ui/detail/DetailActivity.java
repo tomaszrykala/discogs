@@ -30,8 +30,8 @@ import com.tomaszrykala.discogs.data.ListItem;
 import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.DetailMvp;
-import com.tomaszrykala.discogs.ui.list.ListAdapter;
-import com.tomaszrykala.discogs.util.DividerItemDecoration;
+import com.tomaszrykala.discogs.adapter.ListAdapter;
+import com.tomaszrykala.discogs.adapter.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +41,9 @@ import javax.inject.Inject;
 public class DetailActivity extends AppCompatActivity implements DetailMvp.DetailView {
 
     public static final String ID = "ID";
-    @Inject
-    DetailMvp.DetailPresenter mPresenter;
+
+    @Inject DetailMvp.DetailPresenter mPresenter;
+
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private View mBackground;
     private FloatingActionButton mFab;
@@ -152,7 +153,7 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        mRecyclerView.setAdapter(new ListAdapter(listItems, null));
+        mRecyclerView.setAdapter(new ListAdapter(listItems, null, false));
     }
 
 

@@ -18,12 +18,13 @@ import android.widget.ImageView;
 
 import com.tomaszrykala.discogs.DiscogsApp;
 import com.tomaszrykala.discogs.R;
+import com.tomaszrykala.discogs.adapter.DividerItemDecoration;
+import com.tomaszrykala.discogs.adapter.ListAdapter;
 import com.tomaszrykala.discogs.data.ListItem;
 import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.ListMvp;
 import com.tomaszrykala.discogs.ui.detail.DetailActivity;
-import com.tomaszrykala.discogs.util.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +34,11 @@ import javax.inject.Inject;
 public class ListActivity extends AppCompatActivity implements ListAdapter.OnListItemClickListener,
         SwipeRefreshLayout.OnRefreshListener, ListMvp.ListView {
 
+    private List<ListItem> mItems;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Inject
-    ListMvp.ListPresenter mPresenter;
-
-    private List<ListItem> mItems;
+    @Inject ListMvp.ListPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
