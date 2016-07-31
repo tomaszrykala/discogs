@@ -9,20 +9,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.tomaszrykala.discogs.R;
-import com.tomaszrykala.discogs.util.ListItem.ReleaseListItem;
+import com.tomaszrykala.discogs.data.ListItem;
 
 import java.util.List;
 
 class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    private final List<ReleaseListItem> mValues;
+    private final List<ListItem> mValues;
     private final OnListItemClickListener mListener;
 
     interface OnListItemClickListener {
-        void onListItemClick(View itemView, ReleaseListItem item);
+        void onListItemClick(View itemView, ListItem item);
     }
 
-    ListAdapter(List<ReleaseListItem> items, OnListItemClickListener listener) {
+    ListAdapter(List<ListItem> items, OnListItemClickListener listener) {
         mValues = items;
         mListener = listener;
         notifyItemRangeInserted(0, mValues.size());
@@ -37,18 +37,17 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final ReleaseListItem item = mValues.get(position);
-        holder.mItem = item;
-        holder.title.setText(item.title);
-        holder.artist.setText(item.artist);
-        Glide.with(holder.art.getContext()).load(item.artUrl).centerCrop().crossFade().error(R.drawable.discogs_logo)
+        final ListItem item = mValues.get(position);
+        holder.title.setText(item.getTitle());
+        holder.artist.setText(item.getSubtitle());
+        Glide.with(holder.art.getContext()).load(item.getThumbUrl()).centerCrop().crossFade().error(R.drawable.discogs_logo)
                 .into(holder.art);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    mListener.onListItemClick(holder.itemView, holder.mItem);
+                    mListener.onListItemClick(holder.itemView, mValues.get(holder.getAdapterPosition()));
                 }
             }
         });
@@ -62,19 +61,13 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView art;
         final TextView artist;
-        public final TextView title;
-        ReleaseListItem mItem;
+        final TextView title;
 
         ViewHolder(View view) {
             super(view);
             art = (ImageView) view.findViewById(R.id.art);
             title = (TextView) view.findViewById(R.id.title);
             artist = (TextView) view.findViewById(R.id.artist);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + artist.getText() + "'";
         }
     }
 }

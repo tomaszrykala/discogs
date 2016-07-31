@@ -18,12 +18,14 @@ import android.widget.ImageView;
 
 import com.tomaszrykala.discogs.DiscogsApp;
 import com.tomaszrykala.discogs.R;
+import com.tomaszrykala.discogs.data.ListItem;
+import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.ListMvp;
 import com.tomaszrykala.discogs.ui.detail.DetailActivity;
 import com.tomaszrykala.discogs.util.DividerItemDecoration;
-import com.tomaszrykala.discogs.util.ListItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,7 +38,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
 
     @Inject ListMvp.ListPresenter mPresenter;
 
-    private List<ListItem.ReleaseListItem> mItems;
+    private List<ListItem> mItems;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +78,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
         requestRefresh(error, "Retry");
     }
 
-    @Override public void onListItemClick(View itemView, final ListItem.ReleaseListItem item) {
+    @Override public void onListItemClick(View itemView, final ListItem item) {
         final Pair<View, String> pairToolbar =
                 new Pair<>(itemView.findViewById(R.id.title), getString(R.string.transition_toolbar));
         final ImageView pairThumbnail = (ImageView) itemView.findViewById(R.id.art);
@@ -86,7 +88,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
         @SuppressWarnings("unchecked")
         ActivityOptionsCompat transition = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairs);
         final Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(DetailActivity.ID, item.id);
+        intent.putExtra(DetailActivity.ID, item.getId());
         ActivityCompat.startActivity(this, intent, transition.toBundle());
     }
 
@@ -110,7 +112,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     }
 
     private void setupListAdapter(List<Release> releases) {
-        mItems = ListItem.toReleaseListItems(releases);
+        mItems = toReleaseListItems(releases);
         mRecyclerView.setAdapter(new ListAdapter(mItems, this));
     }
 
@@ -133,7 +135,22 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     }
 
     @VisibleForTesting
-    public List<ListItem.ReleaseListItem> getItems() {
+    public List<ListItem> getItems() {
         return mItems;
+    }
+
+    // TODO: Implementation should be hidden, just interface is of interest
+    private static List<ListItem> toReleaseListItems(List<Release> releases) {
+        List<ListItem> items = new ArrayList<>();
+        for (int i = 0, size = releases.size(); i < size; i++) {
+            final Release release = releases.get(i);
+            final String key = String.valueOf(release.getId());
+            final String title = release.getTitle();
+            final String artist = release.getArtist();
+            final String artUrl = release.getThumb();
+            final ListItem item = new ReleaseListItem(key, title, artist, artUrl);
+            items.add(item);
+        }
+        return items;
     }
 }

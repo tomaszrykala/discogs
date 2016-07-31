@@ -15,9 +15,9 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.tomaszrykala.discogs.dagger.component.AppComponent;
+import com.tomaszrykala.discogs.data.ListItem;
 import com.tomaszrykala.discogs.ui.detail.DetailActivity;
 import com.tomaszrykala.discogs.ui.list.ListActivity;
-import com.tomaszrykala.discogs.util.ListItem;
 
 import junit.framework.Assert;
 
@@ -62,11 +62,11 @@ public class AppJourneyTest {
 
     @Test
     public void listItemShowsCorrectData() {
-        final List<ListItem.ReleaseListItem> items = mActivity.getItems();
+        final List<ListItem> items = mActivity.getItems();
         for (int i = 0; i < 5; i++) {
-            final ListItem.ReleaseListItem item = items.get(i);
-            onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.artist)))));
-            onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.title)))));
+            final ListItem item = items.get(i);
+            onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.getSubtitle())))));
+            onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.getTitle())))));
         }
     }
 
@@ -75,8 +75,8 @@ public class AppJourneyTest {
         Instrumentation.ActivityMonitor activityMonitor =
                 getInstrumentation().addMonitor(DetailActivity.class.getName(), null, false);
 
-        final List<ListItem.ReleaseListItem> items = mActivity.getItems();
-        final ListItem.ReleaseListItem item = items.get(0);
+        final List<ListItem> items = mActivity.getItems();
+        final ListItem item = items.get(0);
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         final int monitorHits = activityMonitor.getHits();
@@ -85,24 +85,24 @@ public class AppJourneyTest {
         Assert.assertTrue(activity instanceof DetailActivity);
         final DetailActivity detailActivity = (DetailActivity) activity;
         final CharSequence title = detailActivity.getSupportActionBar().getTitle();
-        Assert.assertTrue(title.toString().equals(item.artist.toString()));
+        Assert.assertTrue(title.toString().equals(item.getSubtitle().toString()));
     }
 
     @Test
     public void listItemIndexIsRetainedWhenGoingBackFromDetail() {
         final Matcher<View> matcher = withId(R.id.recycler_view);
-        final List<ListItem.ReleaseListItem> items = mActivity.getItems();
+        final List<ListItem> items = mActivity.getItems();
         final int position = items.size() - 3;
         onView(matcher).perform(RecyclerViewActions.scrollToPosition(position));
-        final ListItem.ReleaseListItem item = items.get(position);
-        onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.artist)))));
-        onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.title)))));
+        final ListItem item = items.get(position);
+        onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.getSubtitle())))));
+        onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.getTitle())))));
 
         onView(matcher).perform(RecyclerViewActions.actionOnItemAtPosition(position, click()));
         pressBack();
 
-        onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.artist)))));
-        onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.title)))));
+        onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.getSubtitle())))));
+        onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.getTitle())))));
     }
 
 

@@ -17,8 +17,9 @@ import retrofit2.Response;
 
 public class DiscogsModel implements BaseMvp.Model {
 
-    final RealmService mRealmService;
-    final DiscogsService mDiscogsService;
+    private final RealmService mRealmService;
+    private final DiscogsService mDiscogsService;
+
     private Call<Label> mCall;
     private boolean mWasModelEmpty;
 
