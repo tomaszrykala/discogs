@@ -1,12 +1,14 @@
-# discogs
+# Discogs
+Demo Android app using Discogs API.
 
-## building the project
-This project fetches model from Discogs API, which for some of its calls that are used by the app requires an API key and secret. A set of these need to be present in the environment variables as:
-- DiscogsConsumerKey
-- DiscogsConsumerSecret
+## Purpose
+This repository is a showcase of a few good techniques and libraries in Android development:
+- MVP architecture
+- Realm model layer
+- Dependency Injection using Dagger2
+- Unit and UI tests using JUnit4 and Espresso, with Mockito
+- Glide for image fetching, Palette for colour extraction and GlidePalette for putting it all together :-)
+- some more? (Stetho, LeakCanary, ...)
 
-If these aren't present, currently the app will only be unable to fetch album art.
-
-## obtaining and setting up the keys
-- Information how to obtain the keys can be found at https://www.discogs.com/developers/#page:authentication
-- The method how the keys were implemented on my machine at: http://www.rainbowbreeze.it/environmental-variables-api-key-and-secret-buildconfig-and-android-studio/
+## API used
+This app uses Discogs API to fetch data, with key & secret created for the purpose of this app -  (https://www.discogs.com/developers/)
