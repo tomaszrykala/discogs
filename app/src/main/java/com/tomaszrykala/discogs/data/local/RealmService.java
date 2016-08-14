@@ -45,6 +45,7 @@ public class RealmService {
 
     public void setReleaseList(List<Release> releaseList) {
         final Iterator<Release> iterator = releaseList.iterator();
+        //noinspection WhileLoopReplaceableByForEach
         while (iterator.hasNext()) {
             final Release release = iterator.next();
             try {

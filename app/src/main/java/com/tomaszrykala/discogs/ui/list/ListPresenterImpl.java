@@ -1,4 +1,4 @@
-package com.tomaszrykala.discogs.mvp.impl;
+package com.tomaszrykala.discogs.ui.list;
 
 import android.support.annotation.NonNull;
 
@@ -8,7 +8,7 @@ import com.tomaszrykala.discogs.mvp.ListMvp;
 
 import java.util.List;
 
-import static com.tomaszrykala.discogs.mvp.impl.DiscogsModel.ALL_RESULTS_FETCHED;
+import static com.tomaszrykala.discogs.ui.impl.DiscogsModel.ALL_RESULTS_FETCHED;
 
 public class ListPresenterImpl implements ListMvp.ListPresenter {
 
@@ -25,7 +25,7 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
 
     @Override public void onRefreshRequested() {
         if (mNextPage == ALL_RESULTS_FETCHED) {
-            mView.showSnackBar("All results already fetched.", "Refetch?");
+            mView.showSnackBar("All results already fetched.", "Re-fetch?");
         } else {
             mView.showSnackBar("Fetch next page?", "Yes");
         }
@@ -39,10 +39,7 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
     @Override
     public void onRefresh() {
         mReleases = mAppModel.getPersisted();
-
-        // TODO: next page of results aren't being persisted
-        mIsRefreshing = mNextPage == ALL_RESULTS_FETCHED && !mReleases.isEmpty();
-
+        mIsRefreshing = (mNextPage == ALL_RESULTS_FETCHED && !mReleases.isEmpty());
         if (mIsRefreshing) mAppModel.reset();
         doLoad(mIsRefreshing);
     }
@@ -86,7 +83,7 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
                     mView.onLoadSuccess(list);
                 }
 
-                if (!fromCache && !mIsRefreshing) { // && mNextPage != ALL_RESULTS_FETCHED) { // nextPage
+                if (!fromCache && !mIsRefreshing) {
                     mAppModel.persist(list);
                 }
                 mNextPage = nextPage;

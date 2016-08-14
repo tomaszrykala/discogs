@@ -26,8 +26,8 @@ import com.github.florent37.glidepalette.BitmapPalette;
 import com.github.florent37.glidepalette.GlidePalette;
 import com.tomaszrykala.discogs.DiscogsApp;
 import com.tomaszrykala.discogs.R;
-import com.tomaszrykala.discogs.adapter.DividerItemDecoration;
-import com.tomaszrykala.discogs.adapter.ListAdapter;
+import com.tomaszrykala.discogs.adapter.list.DividerItemDecoration;
+import com.tomaszrykala.discogs.adapter.list.ListAdapter;
 import com.tomaszrykala.discogs.data.ListItem;
 import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.model.Release;
@@ -76,13 +76,15 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         ActivityCompat.setEnterSharedElementCallback(this,
                 new SharedElementCallback() {
                     @Override
-                    public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                    public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements,
+                                                   List<View> sharedElementSnapshots) {
                         super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
                         ViewCompat.animate(mFab).setStartDelay(300).scaleX(1f).scaleY(1f);
                     }
 
                     @Override
-                    public void onSharedElementStart(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                    public void onSharedElementStart(List<String> sharedElementNames, List<View> sharedElements,
+                                                     List<View> sharedElementSnapshots) {
                         super.onSharedElementStart(sharedElementNames, sharedElements, sharedElementSnapshots);
                         mFab.setScaleX(0f);
                         mFab.setScaleY(0f);
@@ -121,7 +123,8 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
 
     @Override
     public void onLoadFail(String error) {
-        Snackbar.make(mCollapsingToolbarLayout, error, Snackbar.LENGTH_LONG).setAction("retry?", new View.OnClickListener() {
+        Snackbar.make(mCollapsingToolbarLayout, error, Snackbar.LENGTH_LONG).setAction("retry?", new View
+                .OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPresenter.load(mId);

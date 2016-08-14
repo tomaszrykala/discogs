@@ -1,4 +1,4 @@
-package com.tomaszrykala.discogs.mvp.impl;
+package com.tomaszrykala.discogs.ui.detail;
 
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.BaseMvp;

@@ -20,7 +20,6 @@ public interface DiscogsService {
     @GET("labels/333447/releases?per_page=" + MAX_RESULTS + CONSUMER_KEY_AND_SECRET_SUFFIX)
     Call<Label> getLabel();
 
-    //    @GET("labels/333447/releases?per_page=" + MAX_RESULTS + "&page={page}" + CONSUMER_KEY_AND_SECRET_SUFFIX)
     @GET("labels/333447/releases?per_page=" + MAX_RESULTS + CONSUMER_KEY_AND_SECRET_SUFFIX)
     Call<Label> getLabel(@Query("page") int page);
 }

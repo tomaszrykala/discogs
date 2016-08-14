@@ -5,9 +5,9 @@ import com.tomaszrykala.discogs.data.remote.DiscogsService;
 import com.tomaszrykala.discogs.mvp.BaseMvp;
 import com.tomaszrykala.discogs.mvp.DetailMvp;
 import com.tomaszrykala.discogs.mvp.ListMvp;
-import com.tomaszrykala.discogs.mvp.impl.DetailPresenterImpl;
-import com.tomaszrykala.discogs.mvp.impl.DiscogsModel;
-import com.tomaszrykala.discogs.mvp.impl.ListPresenterImpl;
+import com.tomaszrykala.discogs.ui.detail.DetailPresenterImpl;
+import com.tomaszrykala.discogs.ui.impl.DiscogsModel;
+import com.tomaszrykala.discogs.ui.list.ListPresenterImpl;
 
 import javax.inject.Singleton;
 

@@ -1,4 +1,4 @@
-package com.tomaszrykala.discogs.mvp.impl;
+package com.tomaszrykala.discogs.ui.impl;
 
 import android.support.annotation.NonNull;
 
@@ -20,7 +20,8 @@ import retrofit2.Response;
 
 public class DiscogsModel implements BaseMvp.Model {
 
-    static final int ALL_RESULTS_FETCHED = -1;
+    public static final int ALL_RESULTS_FETCHED = -1;
+
     private final RealmService mRealmService;
     private final DiscogsService mDiscogsService;
 
@@ -88,9 +89,7 @@ public class DiscogsModel implements BaseMvp.Model {
 
     @Override
     public void persist(List<Release> list) {
-//        if (mWasModelEmpty) { // TODO: seems not required anymore
-            mRealmService.setReleaseList(list);
-//        }
+        mRealmService.setReleaseList(list);
         mWasModelEmpty = false;
     }
 

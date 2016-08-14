@@ -18,8 +18,8 @@ import android.widget.ImageView;
 
 import com.tomaszrykala.discogs.DiscogsApp;
 import com.tomaszrykala.discogs.R;
-import com.tomaszrykala.discogs.adapter.DividerItemDecoration;
-import com.tomaszrykala.discogs.adapter.ListAdapter;
+import com.tomaszrykala.discogs.adapter.list.DividerItemDecoration;
+import com.tomaszrykala.discogs.adapter.list.ListAdapter;
 import com.tomaszrykala.discogs.data.ListItem;
 import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.model.Release;

@@ -3,7 +3,7 @@ package com.tomaszrykala.discogs;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.BaseMvp;
 import com.tomaszrykala.discogs.mvp.DetailMvp;
-import com.tomaszrykala.discogs.mvp.impl.DetailPresenterImpl;
+import com.tomaszrykala.discogs.ui.detail.DetailPresenterImpl;
 
 import org.junit.After;
 import org.junit.Before;
@@ -106,7 +106,7 @@ public class DetailPresenterImplTest {
         release.setId(Integer.parseInt(id));
         release.setArtist("Madonna");
 
-        // TODO
+        // TODO: update test
 //        realmRelease.setYear(release.getYear());
 //        realmRelease.setCatno(release.getCatno());
 //        realmRelease.setFormat(release.getFormat());

@@ -64,7 +64,8 @@ public class AppJourneyTest {
         final List<ListItem> items = mActivity.getItems();
         for (int i = 0; i < 5; i++) {
             final ListItem item = items.get(i);
-            onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.getSubtitle())))));
+            onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.getSubtitle())
+            ))));
             onView(withId(R.id.recycler_view)).check(matches(atPosition(i, hasDescendant(withText(item.getTitle())))));
         }
     }
@@ -91,7 +92,7 @@ public class AppJourneyTest {
     public void listItemIndexIsRetainedWhenGoingBackFromDetail() {
         final Matcher<View> matcher = withId(R.id.recycler_view);
         final List<ListItem> items = mActivity.getItems();
-        final int position = items.size() - 3;
+        final int position = 3;
         onView(matcher).perform(RecyclerViewActions.scrollToPosition(position));
         final ListItem item = items.get(position);
         onView(matcher).check(matches(atPosition(position, hasDescendant(withText(item.getSubtitle())))));

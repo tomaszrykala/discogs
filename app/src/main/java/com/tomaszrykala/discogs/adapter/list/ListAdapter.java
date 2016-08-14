@@ -1,4 +1,4 @@
-package com.tomaszrykala.discogs.adapter;
+package com.tomaszrykala.discogs.adapter.list;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -51,9 +51,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_list_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.activity_list_item, parent, false));
     }
 
     @Override

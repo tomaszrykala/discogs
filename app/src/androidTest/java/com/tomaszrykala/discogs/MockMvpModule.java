@@ -24,6 +24,10 @@ class MockMvpModule {
             final ArrayList<Release> mMockReleaseData = getMockReleaseData();
             ListMvp.ListView mListView;
 
+            @Override public void onRefreshRequested() {
+                onRefresh(); // TODO: update test
+            }
+
             @Override
             public void onRequestCancel() {
                 // no-op
@@ -103,7 +107,7 @@ class MockMvpModule {
             release.setArtist("Dixon and Ame :: " + id);
             release.setTitle("Essential Mix :: " + id);
 
-            // TODO
+            // TODO: update test
 //            realmRelease.setYear(release.getYear());
 //            realmRelease.setCatno(release.getCatno());
 //            realmRelease.setFormat(release.getFormat());
