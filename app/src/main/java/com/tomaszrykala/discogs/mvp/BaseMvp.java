@@ -18,8 +18,10 @@ public interface BaseMvp {
 
         void fetch(Callback callback);
 
+        void fetch(Callback callback, int page);
+
         interface Callback {
-            void onSuccess(List<Release> list);
+            void onSuccess(List<Release> list, int nextPage);
 
             void onFail(String error);
         }

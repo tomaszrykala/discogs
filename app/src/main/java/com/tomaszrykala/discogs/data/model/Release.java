@@ -63,7 +63,20 @@ public class Release extends RealmObject {
 
     public static final Comparator<Release> COMPARATOR = new Comparator<Release>() {
         @Override public int compare(Release lhs, Release rhs) {
-            return Integer.parseInt(lhs.catno) - Integer.parseInt(rhs.catno);
+            // annoyingly, some releases have letters in their catno's
+            final int leftCatNo;
+            final int rightCatNo;
+            try {
+                leftCatNo = Integer.parseInt(lhs.catno);
+            } catch (NumberFormatException e) {
+                return -1;
+            }
+            try {
+                rightCatNo = Integer.parseInt(rhs.catno);
+            } catch (NumberFormatException e) {
+                return 1;
+            }
+            return leftCatNo - rightCatNo;
         }
     };
 

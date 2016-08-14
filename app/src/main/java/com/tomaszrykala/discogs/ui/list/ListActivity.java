@@ -39,6 +39,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Inject ListMvp.ListPresenter mPresenter;
+    private ListAdapter mListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +121,15 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     }
 
     private void setupListAdapter(List<Release> releases) {
-        mItems = toReleaseListItems(releases);
-        mRecyclerView.setAdapter(new ListAdapter(mItems, this));
+        final List<ListItem> items = toReleaseListItems(releases);
+        if (mListAdapter == null) {
+            mItems = items;
+            mListAdapter = new ListAdapter(mItems, this);
+            mRecyclerView.setAdapter(mListAdapter);
+        } else {
+            mItems.addAll(items);
+            mListAdapter.addItems(items);
+        }
     }
 
     private void requestRefresh(String message, String action) {

@@ -43,6 +43,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         notifyItemRangeInserted(0, mValues.size());
     }
 
+    public void addItems(@NonNull List<ListItem> items) {
+        final int itemCount = getItemCount();
+        mValues.addAll(items);
+        notifyItemRangeInserted(itemCount, itemCount + items.size());
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())

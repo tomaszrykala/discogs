@@ -4,7 +4,7 @@ import com.tomaszrykala.discogs.data.model.Label;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface DiscogsService {
 
@@ -20,6 +20,7 @@ public interface DiscogsService {
     @GET("labels/333447/releases?per_page=" + MAX_RESULTS + CONSUMER_KEY_AND_SECRET_SUFFIX)
     Call<Label> getLabel();
 
-    @GET("labels/333447/releases?per_page=" + MAX_RESULTS + "&page={page}" + CONSUMER_KEY_AND_SECRET_SUFFIX)
-    Call<Label> getLabel(@Path("page") int page);
+    //    @GET("labels/333447/releases?per_page=" + MAX_RESULTS + "&page={page}" + CONSUMER_KEY_AND_SECRET_SUFFIX)
+    @GET("labels/333447/releases?per_page=" + MAX_RESULTS + CONSUMER_KEY_AND_SECRET_SUFFIX)
+    Call<Label> getLabel(@Query("page") int page);
 }
