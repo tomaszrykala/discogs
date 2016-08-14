@@ -9,9 +9,13 @@ public interface ListMvp extends BaseMvp {
     interface ListView extends View {
 
         void onLoadSuccess(List<Release> list);
+
+        void showSnackBar(String message, String action);
     }
 
     interface ListPresenter extends Presenter<ListView> {
+
+        void onRefreshRequested();
 
         void onRequestCancel();
 

@@ -20,7 +20,7 @@ import retrofit2.Response;
 
 public class DiscogsModel implements BaseMvp.Model {
 
-    public static final int ALL_RESULTS_FETCHED = -1;
+    static final int ALL_RESULTS_FETCHED = -1;
     private final RealmService mRealmService;
     private final DiscogsService mDiscogsService;
 
@@ -53,7 +53,7 @@ public class DiscogsModel implements BaseMvp.Model {
             mCall = mDiscogsService.getLabel();
             mCall.enqueue(getCallback(callback));
         } else {
-            callback.onSuccess(releases, 1);
+            callback.onSuccess(releases, true, ALL_RESULTS_FETCHED);
         }
     }
 
@@ -75,7 +75,7 @@ public class DiscogsModel implements BaseMvp.Model {
                 final Set<Release> releaseSet = new HashSet<>(releaseList);
                 final List<Release> releaseSortedList = new ArrayList<>(releaseSet);
                 Collections.sort(releaseSortedList, Release.COMPARATOR);
-                callback.onSuccess(releaseSortedList, nextPage);
+                callback.onSuccess(releaseSortedList, false, nextPage);
                 mCall = null;
             }
 
@@ -88,9 +88,9 @@ public class DiscogsModel implements BaseMvp.Model {
 
     @Override
     public void persist(List<Release> list) {
-        if (mWasModelEmpty) {
+//        if (mWasModelEmpty) { // TODO: seems not required anymore
             mRealmService.setReleaseList(list);
-        }
+//        }
         mWasModelEmpty = false;
     }
 

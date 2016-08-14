@@ -23,6 +23,14 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
         mAppModel = appModel;
     }
 
+    @Override public void onRefreshRequested() {
+        if (mNextPage == ALL_RESULTS_FETCHED) {
+            mView.showSnackBar("All results already fetched.", "Refetch?");
+        } else {
+            mView.showSnackBar("Fetch next page?", "Yes");
+        }
+    }
+
     @Override
     public void onRequestCancel() {
         mView.showLoading(false);
@@ -31,8 +39,10 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
     @Override
     public void onRefresh() {
         mReleases = mAppModel.getPersisted();
+
         // TODO: next page of results aren't being persisted
-        mIsRefreshing = !mReleases.isEmpty();
+        mIsRefreshing = mNextPage == ALL_RESULTS_FETCHED && !mReleases.isEmpty();
+
         if (mIsRefreshing) mAppModel.reset();
         doLoad(mIsRefreshing);
     }
@@ -59,9 +69,7 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
         mIsRefreshing = false;
         mAppModel.cancelFetch();
 
-        if (mNextPage == ALL_RESULTS_FETCHED) {
-            mView.onLoadFail("No more results to fetch.");
-        } else if (mNextPage > 0) {
+        if (mNextPage > 0) {
             mAppModel.fetch(getCallback(reset), mNextPage);
         } else {
             mAppModel.fetch(getCallback(reset));
@@ -72,12 +80,15 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
         return new BaseMvp.Model.Callback() {
 
             @Override
-            public void onSuccess(List<Release> list, int nextPage) {
+            public void onSuccess(List<Release> list, boolean fromCache, int nextPage) {
                 if (mView != null) {
                     mView.showLoading(false);
                     mView.onLoadSuccess(list);
                 }
-                mAppModel.persist(list);
+
+                if (!fromCache && !mIsRefreshing) { // && mNextPage != ALL_RESULTS_FETCHED) { // nextPage
+                    mAppModel.persist(list);
+                }
                 mNextPage = nextPage;
             }
 

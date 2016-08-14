@@ -21,7 +21,7 @@ public interface BaseMvp {
         void fetch(Callback callback, int page);
 
         interface Callback {
-            void onSuccess(List<Release> list, int nextPage);
+            void onSuccess(List<Release> list, boolean fromCache, int nextPage);
 
             void onFail(String error);
         }

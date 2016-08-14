@@ -82,7 +82,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
 
     @Override
     public void onLoadFail(String error) {
-        requestRefresh(error, "Retry");
+        showSnackBar(error, "Retry");
     }
 
     @Override
@@ -101,11 +101,6 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     }
 
     @Override
-    public void onRefresh() {
-        requestRefresh("Refresh?", "Yes");
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
         return true;
@@ -114,7 +109,7 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
-            onRefresh();
+            mPresenter.onRefreshRequested();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -132,7 +127,8 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
         }
     }
 
-    private void requestRefresh(String message, String action) {
+    @Override
+    public void showSnackBar(String message, String action) {
         Snackbar.make(mRecyclerView, message, Snackbar.LENGTH_LONG)
                 .setAction(action, new View.OnClickListener() {
                     @Override
@@ -170,5 +166,9 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
             items.add(item);
         }
         return items;
+    }
+
+    @Override public void onRefresh() {
+        mPresenter.onRefreshRequested();
     }
 }
