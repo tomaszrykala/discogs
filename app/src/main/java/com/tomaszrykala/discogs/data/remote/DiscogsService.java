@@ -2,9 +2,9 @@ package com.tomaszrykala.discogs.data.remote;
 
 import com.tomaszrykala.discogs.data.model.Label;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import rx.Observable;
 
 public interface DiscogsService {
 
@@ -18,8 +18,8 @@ public interface DiscogsService {
 
     // api calls
     @GET("labels/333447/releases?per_page=" + MAX_RESULTS + CONSUMER_KEY_AND_SECRET_SUFFIX)
-    Call<Label> getLabel();
+    Observable<Label> getLabel();
 
     @GET("labels/333447/releases?per_page=" + MAX_RESULTS + CONSUMER_KEY_AND_SECRET_SUFFIX)
-    Call<Label> getLabel(@Query("page") int page);
+    Observable<Label> getLabel(@Query("page") int page);
 }

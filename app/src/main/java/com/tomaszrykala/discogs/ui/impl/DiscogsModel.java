@@ -1,6 +1,7 @@
 package com.tomaszrykala.discogs.ui.impl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.tomaszrykala.discogs.data.local.RealmService;
 import com.tomaszrykala.discogs.data.model.Label;
@@ -16,7 +17,10 @@ import java.util.List;
 import java.util.Set;
 
 import retrofit2.Call;
-import retrofit2.Response;
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class DiscogsModel implements BaseMvp.Model {
 
@@ -51,44 +55,51 @@ public class DiscogsModel implements BaseMvp.Model {
         final List<Release> releases = mRealmService.getReleases();
         mWasModelEmpty = releases.isEmpty();
         if (mWasModelEmpty) {
-            mCall = mDiscogsService.getLabel();
-            mCall.enqueue(getCallback(callback));
+            getLabel(callback, mDiscogsService.getLabel());
         } else {
             callback.onSuccess(releases, true, ALL_RESULTS_FETCHED);
         }
     }
 
     @Override public void fetch(Callback callback, int page) {
-        mDiscogsService.getLabel(page).enqueue(getCallback(callback));
+        getLabel(callback, mDiscogsService.getLabel(page));
     }
 
-    @NonNull private retrofit2.Callback<Label> getCallback(final Callback callback) {
-        return new retrofit2.Callback<Label>() {
-            @Override public void onResponse(Call<Label> call, Response<Label> response) {
-                final Label label = response.body();
+    private void getLabel(final Callback callback, @NonNull final Observable<Label> labelObservable) {
+        labelObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Label>() {
+                    @Override public void onCompleted() {
+                        Log.d(DiscogsModel.this.getClass().getSimpleName(), "getLabel.onCompleted()");
+                    }
 
-                final Pagination pagination = label.getPagination();
-                final int pages = pagination.getPages();
-                final Integer page = pagination.getPage();
-                final int nextPage = pages > page ? page + 1 : ALL_RESULTS_FETCHED;
+                    @Override public void onError(Throwable e) {
+                        callback.onFail(e.getMessage());
+                    }
 
-                final List<Release> releaseList = label.getReleases();
-                final Set<Release> releaseSet = new HashSet<>(releaseList);
-                final List<Release> releaseSortedList = new ArrayList<>(releaseSet);
-                Collections.sort(releaseSortedList, Release.COMPARATOR);
-                callback.onSuccess(releaseSortedList, false, nextPage);
-                mCall = null;
-            }
-
-            @Override public void onFailure(Call<Label> call, Throwable t) {
-                callback.onFail(t.getMessage());
-                mCall = null;
-            }
-        };
+                    @Override public void onNext(Label label) {
+                        callback.onSuccess(getSortedReleases(label), false, getNextPage(label));
+                    }
+                });
     }
 
-    @Override
-    public void persist(List<Release> list) {
+    private int getNextPage(Label label) {
+        final Pagination pagination = label.getPagination();
+        final int pages = pagination.getPages();
+        final Integer page = pagination.getPage();
+        return pages > page ? page + 1 : ALL_RESULTS_FETCHED;
+    }
+
+    @NonNull private List<Release> getSortedReleases(Label label) {
+        final List<Release> releaseList = label.getReleases();
+        final Set<Release> releaseSet = new HashSet<>(releaseList);
+        final List<Release> releaseSortedList = new ArrayList<>(releaseSet);
+        Collections.sort(releaseSortedList, Release.COMPARATOR);
+        return releaseSortedList;
+    }
+
+    @Override public void persist(List<Release> list) {
         mRealmService.setReleaseList(list);
         mWasModelEmpty = false;
     }

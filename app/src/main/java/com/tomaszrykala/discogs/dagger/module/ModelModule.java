@@ -10,6 +10,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
@@ -35,6 +36,7 @@ public class ModelModule {
 
             final Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(ENDPOINT)
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                     .build();
 
