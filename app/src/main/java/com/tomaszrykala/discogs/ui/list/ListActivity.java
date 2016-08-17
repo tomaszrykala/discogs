@@ -21,12 +21,9 @@ import com.tomaszrykala.discogs.R;
 import com.tomaszrykala.discogs.adapter.list.DividerItemDecoration;
 import com.tomaszrykala.discogs.adapter.list.ListAdapter;
 import com.tomaszrykala.discogs.data.ListItem;
-import com.tomaszrykala.discogs.data.ReleaseListItem;
-import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.ListMvp;
 import com.tomaszrykala.discogs.ui.detail.DetailActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -76,11 +73,6 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     }
 
     @Override
-    public void onLoadSuccess(List<Release> list) {
-        setupListAdapter(list);
-    }
-
-    @Override
     public void onLoadFail(String error) {
         showSnackBar(error, "Retry");
     }
@@ -115,8 +107,8 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupListAdapter(List<Release> releases) {
-        final List<ListItem> items = toReleaseListItems(releases);
+    @Override
+    public void onLoadSuccess(List<ListItem> items) {
         if (mListAdapter == null) {
             mItems = items;
             mListAdapter = new ListAdapter(mItems, this);
@@ -151,21 +143,6 @@ public class ListActivity extends AppCompatActivity implements ListAdapter.OnLis
     @VisibleForTesting
     public List<ListItem> getItems() {
         return mItems;
-    }
-
-    // TODO: Implementation should be hidden, just interface is of interest
-    private List<ListItem> toReleaseListItems(List<Release> releases) {
-        List<ListItem> items = new ArrayList<>();
-        for (int i = 0, size = releases.size(); i < size; i++) {
-            final Release release = releases.get(i);
-            final String key = String.valueOf(release.getId());
-            final String title = release.getTitle();
-            final String artist = release.getArtist();
-            final String artUrl = release.getThumb();
-            final ListItem item = new ReleaseListItem(key, title, artist, artUrl);
-            items.add(item);
-        }
-        return items;
     }
 
     @Override public void onRefresh() {

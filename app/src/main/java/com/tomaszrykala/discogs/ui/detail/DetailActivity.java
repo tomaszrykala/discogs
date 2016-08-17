@@ -151,7 +151,7 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
     }
 
     private void setupListAdapter(Release release) {
-        final List<ListItem> listItems = toReleaseListItems(release);
+        final List<ListItem> listItems = toListItem(release);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -195,8 +195,8 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         Toast.makeText(DetailActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
-    // TODO: Implementation should be hidden, just interface is of interest
-    private List<ListItem> toReleaseListItems(Release release) {
+    // TODO: boilerplate, do in model
+    private List<ListItem> toListItem(Release release) {
         List<ListItem> items = new ArrayList<>();
         items.add(new ReleaseListItem(null, "Discogs id", String.valueOf(release.getId()), null));
         items.add(new ReleaseListItem(null, "Title", release.getTitle(), null));

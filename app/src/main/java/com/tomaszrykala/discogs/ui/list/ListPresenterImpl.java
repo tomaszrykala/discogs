@@ -2,6 +2,7 @@ package com.tomaszrykala.discogs.ui.list;
 
 import android.support.annotation.NonNull;
 
+import com.tomaszrykala.discogs.data.ListItem;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.BaseMvp;
 import com.tomaszrykala.discogs.mvp.ListMvp;
@@ -76,15 +77,10 @@ public class ListPresenterImpl implements ListMvp.ListPresenter {
     @NonNull private BaseMvp.Model.Callback getCallback(final boolean reset) {
         return new BaseMvp.Model.Callback() {
 
-            @Override
-            public void onSuccess(List<Release> list, boolean fromCache, int nextPage) {
+            @Override public void onSuccess(List<ListItem> items, boolean fromCache, int nextPage) {
                 if (mView != null) {
                     mView.showLoading(false);
-                    mView.onLoadSuccess(list);
-                }
-
-                if (!fromCache && !mIsRefreshing) {
-                    mAppModel.persist(list);
+                    mView.onLoadSuccess(items);
                 }
                 mNextPage = nextPage;
             }

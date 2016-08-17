@@ -3,6 +3,8 @@ package com.tomaszrykala.discogs.ui.impl;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.tomaszrykala.discogs.data.ListItem;
+import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.local.RealmService;
 import com.tomaszrykala.discogs.data.model.Label;
 import com.tomaszrykala.discogs.data.model.Pagination;
@@ -20,9 +22,13 @@ import retrofit2.Call;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class DiscogsModel implements BaseMvp.Model {
+
+    private final String TAG = DiscogsModel.class.getSimpleName();
 
     public static final int ALL_RESULTS_FETCHED = -1;
 
@@ -31,6 +37,7 @@ public class DiscogsModel implements BaseMvp.Model {
 
     private Call<Label> mCall;
     private boolean mWasModelEmpty;
+    private int mNextPage;
 
     public DiscogsModel(RealmService realmService, DiscogsService discogsService) {
         mRealmService = realmService;
@@ -57,7 +64,18 @@ public class DiscogsModel implements BaseMvp.Model {
         if (mWasModelEmpty) {
             getLabel(callback, mDiscogsService.getLabel());
         } else {
-            callback.onSuccess(releases, true, ALL_RESULTS_FETCHED);
+            Observable.from(releases)
+                    .map(new Func1<Release, ListItem>() {
+                        @Override public ListItem call(Release release) {
+                            return getListItem(release);
+                        }
+                    })
+                    .toList()
+                    .subscribe(new Action1<List<ListItem>>() {
+                        @Override public void call(List<ListItem> listItems) {
+                            callback.onSuccess(listItems, true, ALL_RESULTS_FETCHED);
+                        }
+                    });
         }
     }
 
@@ -69,19 +87,56 @@ public class DiscogsModel implements BaseMvp.Model {
         labelObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Label>() {
+                .doOnNext(new Action1<Label>() {
+                    @Override public void call(Label label) {
+                        mNextPage = getNextPage(label);
+                    }
+                })
+                .map(new Func1<Label, List<Release>>() {
+                    @Override public List<Release> call(Label label) {
+                        return getSortedReleases(label);
+                    }
+                })
+                .doOnNext(new Action1<List<Release>>() {
+                    @Override public void call(List<Release> releases) {
+                        if (mWasModelEmpty || mNextPage != 0) {
+                            Log.d(TAG, "DiscogsModel.releases = [" + releases.size() + "]");
+                            persist(releases);
+                        }
+                    }
+                })
+                .flatMapIterable(new Func1<List<Release>, Iterable<Release>>() {
+                    @Override public Iterable<Release> call(List<Release> releases) {
+                        return releases;
+                    }
+                })
+                .map(new Func1<Release, ListItem>() {
+                    @Override public ListItem call(Release release) {
+                        return getListItem(release);
+                    }
+                })
+                .toList()
+                .subscribe(new Observer<List<ListItem>>() {
                     @Override public void onCompleted() {
-                        Log.d(DiscogsModel.this.getClass().getSimpleName(), "getLabel.onCompleted()");
+                        Log.d(TAG, "DiscogsModel.onCompleted");
                     }
 
                     @Override public void onError(Throwable e) {
                         callback.onFail(e.getMessage());
                     }
 
-                    @Override public void onNext(Label label) {
-                        callback.onSuccess(getSortedReleases(label), false, getNextPage(label));
+                    @Override public void onNext(List<ListItem> releaseListItems) {
+                        callback.onSuccess(releaseListItems, false, mNextPage);
                     }
                 });
+    }
+
+    @NonNull private ListItem getListItem(Release release) {
+        return new ReleaseListItem(
+                String.valueOf(release.getId()),
+                release.getTitle(),
+                release.getArtist(),
+                release.getThumb());
     }
 
     private int getNextPage(Label label) {

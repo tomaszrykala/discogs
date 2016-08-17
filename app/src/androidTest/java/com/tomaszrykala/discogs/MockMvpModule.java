@@ -1,5 +1,7 @@
 package com.tomaszrykala.discogs;
 
+import com.tomaszrykala.discogs.data.ListItem;
+import com.tomaszrykala.discogs.data.ReleaseListItem;
 import com.tomaszrykala.discogs.data.model.Release;
 import com.tomaszrykala.discogs.mvp.BaseMvp;
 import com.tomaszrykala.discogs.mvp.DetailMvp;
@@ -21,7 +23,7 @@ class MockMvpModule {
     ListMvp.ListPresenter provideListPresenter() {
         return new ListMvp.ListPresenter() {
 
-            final ArrayList<Release> mMockReleaseData = getMockReleaseData();
+            final ArrayList<ListItem> mMockReleaseData = getMockReleaseData();
             ListMvp.ListView mListView;
 
             @Override public void onRefreshRequested() {
@@ -64,10 +66,16 @@ class MockMvpModule {
 
             @Override
             public void load(String id) {
-                final ArrayList<Release> mockReleaseData = getMockReleaseData();
+                final ArrayList<ListItem> mockReleaseData = getMockReleaseData();
                 for (int i = 0; i < mockReleaseData.size(); i++) {
-                    final Release release = mockReleaseData.get(i);
-                    if (release.getId().equals(Integer.parseInt(id))) {
+                    final ListItem listItem = mockReleaseData.get(i);
+                    if (listItem.getId().equals(Integer.parseInt(id))) {
+                        final Release release = new Release();
+                        release.setId(release.getId());
+                        release.setThumb(release.getThumb());
+                        release.setArtist(release.getArtist());
+                        release.setTitle(release.getTitle());
+
                         mDetailView.onLoadSuccess(release);
                         break;
                     }
@@ -97,23 +105,12 @@ class MockMvpModule {
         return Mockito.mock(BaseMvp.Model.class); // ...or specific test impl like above
     }
 
-    private ArrayList<Release> getMockReleaseData() {
-        final ArrayList<Release> releaseArrayList = new ArrayList<>();
+    private ArrayList<ListItem> getMockReleaseData() {
+        final ArrayList<ListItem> releaseArrayList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            final Release release = new Release();
             final int id = 200 + i;
-            release.setId(id);
-            release.setThumb("");
-            release.setArtist("Dixon and Ame :: " + id);
-            release.setTitle("Essential Mix :: " + id);
-
-            // TODO: update test
-//            realmRelease.setYear(release.getYear());
-//            realmRelease.setCatno(release.getCatno());
-//            realmRelease.setFormat(release.getFormat());
-//            realmRelease.setResourceUrl(release.getResourceUrl());
-
-            releaseArrayList.add(release);
+            releaseArrayList.add(
+                    new ReleaseListItem(String.valueOf(id), "", "Dixon and Ame :: " + id, "Essential Mix :: " + id));
         }
         return releaseArrayList;
     }

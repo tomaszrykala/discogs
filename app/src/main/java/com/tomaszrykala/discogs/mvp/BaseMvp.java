@@ -1,5 +1,6 @@
 package com.tomaszrykala.discogs.mvp;
 
+import com.tomaszrykala.discogs.data.ListItem;
 import com.tomaszrykala.discogs.data.model.Release;
 
 import java.util.List;
@@ -21,7 +22,9 @@ public interface BaseMvp {
         void fetch(Callback callback, int page);
 
         interface Callback {
-            void onSuccess(List<Release> list, boolean fromCache, int nextPage);
+//            void onSuccess(List<Release> list, boolean fromCache, int nextPage);
+
+            void onSuccess(List<ListItem> items, boolean fromCache, int nextPage);
 
             void onFail(String error);
         }
