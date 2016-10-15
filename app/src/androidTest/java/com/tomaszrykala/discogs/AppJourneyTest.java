@@ -76,8 +76,9 @@ public class AppJourneyTest {
                 getInstrumentation().addMonitor(DetailActivity.class.getName(), null, false);
 
         final List<ListItem> items = mActivity.getItems();
-        final ListItem item = items.get(0);
-        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        final int itemIndex = 0;
+        final ListItem item = items.get(itemIndex);
+        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(itemIndex, click()));
 
         final int monitorHits = activityMonitor.getHits();
         Assert.assertEquals(1, monitorHits);

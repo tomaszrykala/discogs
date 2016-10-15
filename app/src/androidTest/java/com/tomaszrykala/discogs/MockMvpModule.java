@@ -19,11 +19,12 @@ import dagger.Provides;
 @Module
 class MockMvpModule {
 
+    private final ArrayList<ListItem> mMockReleaseData = getMockReleaseData();
+
     @Provides
     ListMvp.ListPresenter provideListPresenter() {
         return new ListMvp.ListPresenter() {
 
-            final ArrayList<ListItem> mMockReleaseData = getMockReleaseData();
             ListMvp.ListView mListView;
 
             @Override public void onRefreshRequested() {
@@ -66,15 +67,15 @@ class MockMvpModule {
 
             @Override
             public void load(String id) {
-                final ArrayList<ListItem> mockReleaseData = getMockReleaseData();
-                for (int i = 0; i < mockReleaseData.size(); i++) {
-                    final ListItem listItem = mockReleaseData.get(i);
-                    if (listItem.getId().equals(Integer.parseInt(id))) {
+                for (int i = 0; i < mMockReleaseData.size(); i++) {
+                    final ListItem listItem = mMockReleaseData.get(i);
+                    final String listItemId = listItem.getId();
+                    if (listItemId.equals(id)) {
                         final Release release = new Release();
-                        release.setId(release.getId());
-                        release.setThumb(release.getThumb());
-                        release.setArtist(release.getArtist());
-                        release.setTitle(release.getTitle());
+                        release.setId(Integer.valueOf(listItemId));
+                        release.setThumb(listItem.getThumbUrl());
+                        release.setArtist(listItem.getSubtitle());
+                        release.setTitle(listItem.getTitle());
 
                         mDetailView.onLoadSuccess(release);
                         break;
@@ -110,7 +111,7 @@ class MockMvpModule {
         for (int i = 0; i < 20; i++) {
             final int id = 200 + i;
             releaseArrayList.add(
-                    new ReleaseListItem(String.valueOf(id), "", "Dixon and Ame :: " + id, "Essential Mix :: " + id));
+                    new ReleaseListItem(String.valueOf(id), "Essential Mix :: " + id, "Dixon and Ame :: " + id, "url"));
         }
         return releaseArrayList;
     }
