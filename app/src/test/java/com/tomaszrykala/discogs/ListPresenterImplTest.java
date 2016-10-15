@@ -63,12 +63,9 @@ public class ListPresenterImplTest {
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
         final ArrayList<ListItem> releases = new ArrayList<>();
-        mCaptor.getValue().onSuccess(releases, false, 1); // test pagination
+        mCaptor.getValue().onSuccess(releases, false, 1); // TODO: test pagination
         Mockito.verify(mMockView).onLoadSuccess(releases);
         Mockito.verify(mMockView).showLoading(false);
-        Mockito.verifyNoMoreInteractions(mMockView);
-
-        //  Mockito.verify(mMockAppModel).persist(releases); // TODO
     }
 
     @Test
@@ -99,11 +96,8 @@ public class ListPresenterImplTest {
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
         final ArrayList<ListItem> releases = new ArrayList<>();
-        mCaptor.getValue().onSuccess(releases, false, 1); // test pagination
+        mCaptor.getValue().onSuccess(releases, false, 1); // TODO: test pagination
         Mockito.verify(mMockView).onLoadSuccess(releases);
-        Mockito.verifyNoMoreInteractions(mMockView);
-
-//        Mockito.verify(mMockAppModel, Mockito.times(2)).persist(releases); // TODO
     }
 
     @Test
@@ -114,13 +108,9 @@ public class ListPresenterImplTest {
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
         final ArrayList<ListItem> releases = new ArrayList<>();
-        mCaptor.getValue().onSuccess(releases, false, 1); // test pagination
+        mCaptor.getValue().onSuccess(releases, false, 1); // TODO: test pagination
         Mockito.verify(mMockView, Mockito.times(3)).showLoading(false);
         Mockito.verify(mMockView, Mockito.times(2)).onLoadSuccess(releases);
-        Mockito.verifyNoMoreInteractions(mMockView);
-
-//        Mockito.verify(mMockAppModel, Mockito.times(2)).persist(releases); // TODO
-        Mockito.verifyNoMoreInteractions(mMockAppModel);
     }
 
     @Test
@@ -134,11 +124,8 @@ public class ListPresenterImplTest {
         Mockito.verifyNoMoreInteractions(mMockAppModel);
 
         final ArrayList<ListItem> releases = new ArrayList<>();
-        mCaptor.getValue().onSuccess(releases, false, 1); // test pagination
+        mCaptor.getValue().onSuccess(releases, false, 1); // TODO: test pagination
         Mockito.verify(mMockView, Mockito.times(invocations)).showLoading(false);
         Mockito.verify(mMockView, Mockito.times(invocations)).onLoadSuccess(releases);
-        Mockito.verifyNoMoreInteractions(mMockView);
-
-//        Mockito.verify(mMockAppModel, Mockito.times(invocations)).persist(releases); // TODO
     }
 }

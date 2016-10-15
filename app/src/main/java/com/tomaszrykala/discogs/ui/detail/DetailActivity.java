@@ -195,7 +195,7 @@ public class DetailActivity extends AppCompatActivity implements DetailMvp.Detai
         Toast.makeText(DetailActivity.this, message, Toast.LENGTH_LONG).show();
     }
 
-    // TODO: boilerplate, do in model
+    // TODO: boilerplate, do in model?
     private List<ListItem> toListItem(Release release) {
         List<ListItem> items = new ArrayList<>();
         items.add(new ReleaseListItem(null, "Discogs id", String.valueOf(release.getId()), null));

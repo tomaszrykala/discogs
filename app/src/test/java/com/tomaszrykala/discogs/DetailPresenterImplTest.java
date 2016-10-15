@@ -35,6 +35,8 @@ public class DetailPresenterImplTest {
     @After
     public void tearDown() {
         mPresenter.releaseView();
+        Mockito.verifyNoMoreInteractions(mMockAppModel);
+        Mockito.verifyNoMoreInteractions(mMockView);
     }
 
     @Test
@@ -63,22 +65,18 @@ public class DetailPresenterImplTest {
 
     @Test
     public void setView_doesNoInteractions() {
-        Mockito.verifyNoMoreInteractions(mMockAppModel);
-        Mockito.verifyNoMoreInteractions(mMockView);
+        // do nothing
     }
 
     @Test
     public void releaseView_doesNoInteractions() {
         mPresenter.releaseView();
-        Mockito.verifyNoMoreInteractions(mMockAppModel);
-        Mockito.verifyNoMoreInteractions(mMockView);
     }
 
     @Test
     public void onFabClick_nullReleaseShowsError() {
         mPresenter.onFabClick();
         Mockito.verify(mMockView).share("Failed to share track.");
-        Mockito.verifyNoMoreInteractions(mMockView);
     }
 
     @Test
@@ -96,7 +94,6 @@ public class DetailPresenterImplTest {
 
         mPresenter.onFabClick();
         Mockito.verify(mMockView).share("Failed to share track.");
-        Mockito.verifyNoMoreInteractions(mMockView);
     }
 
     @Test
@@ -105,12 +102,6 @@ public class DetailPresenterImplTest {
         final Release release = new Release();
         release.setId(Integer.parseInt(id));
         release.setArtist("Madonna");
-
-        // TODO: update test
-//        realmRelease.setYear(release.getYear());
-//        realmRelease.setCatno(release.getCatno());
-//        realmRelease.setFormat(release.getFormat());
-//        realmRelease.setResourceUrl(release.getResourceUrl());
 
         Mockito.when(mMockAppModel.get(id)).thenReturn(release);
         final String expected = "\"Tweet\" sent:\n" + release;
@@ -123,7 +114,5 @@ public class DetailPresenterImplTest {
 
         mPresenter.onFabClick();
         Mockito.verify(mMockView).share(expected);
-        Mockito.verifyNoMoreInteractions(mMockView);
     }
-
 }

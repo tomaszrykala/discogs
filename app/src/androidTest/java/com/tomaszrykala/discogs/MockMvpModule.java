@@ -27,8 +27,9 @@ class MockMvpModule {
 
             ListMvp.ListView mListView;
 
-            @Override public void onRefreshRequested() {
-                onRefresh(); // TODO: update test
+            @Override
+            public void onRefreshRequested() {
+                onRefresh();
             }
 
             @Override
